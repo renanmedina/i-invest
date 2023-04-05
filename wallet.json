@@ -1,0 +1,20 @@
+{
+  "id": 1,
+  "name": "Wallet for tests",
+  "client": {
+    "id": 232132,
+    "name": "Testing client"
+  },
+  "transactions": [
+    {
+      "asset": {
+        "kind": "fii",
+        "ticker": "MXRF11",
+        "price": 10.37
+      },
+      "taxes": 0.0,
+      "quantity": 10,
+      "transactionDate": "2023-04-04 23:32:00"
+    }
+  ]
+}
