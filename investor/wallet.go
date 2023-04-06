@@ -8,10 +8,11 @@ import (
 )
 
 type Wallet struct {
-	Id           int64         `json:"id"`
-	Name         string        `json:"name"`
-	Client       Client        `json:"client"`
-	Transactions []Transaction `json:"transactions"`
+	Id            int64         `json:"id"`
+	Name          string        `json:"name"`
+	Client        Client        `json:"client"`
+	Transactions  []Transaction `json:"transactions"`
+	Consolidation map[string]ConsolidatedAsset
 }
 
 func (w Wallet) Total() float64 {
@@ -21,6 +22,26 @@ func (w Wallet) Total() float64 {
 	}
 
 	return total
+}
+
+func (w Wallet) Consolidate() Wallet {
+	consolidationMap := make(map[string]ConsolidatedAsset)
+
+	for _, transaction := range w.Transactions {
+		asset := transaction.Asset
+		consolidator, alreadyOnMap := consolidationMap[asset.Ticker]
+
+		if alreadyOnMap {
+			consolidator.Add(transaction)
+			continue
+		}
+
+		consolidated := ConsolidatedAsset{asset, transaction.TotalWithoutTaxes(), transaction.Quantity, transaction.AssetPrice()}
+		consolidationMap[asset.Ticker] = consolidated
+	}
+
+	w.Consolidation = consolidationMap
+	return w
 }
 
 func BuildWalletFromJsonFile(filepath string) Wallet {
@@ -37,5 +58,6 @@ func BuildWalletFromJsonFile(filepath string) Wallet {
 
 	json.Unmarshal(byteValue, &wallet)
 
+	wallet = wallet.Consolidate()
 	return wallet
 }
