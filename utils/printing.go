@@ -25,5 +25,10 @@ func PrintConsolidation(wallet investor.Wallet) {
 		writer.AppendRow([]interface{}{asset.Ticker, quantity, averagePrice, total})
 	}
 
+	writer.SortBy([]table.SortBy{
+		{Name: "Total", Mode: table.DscNumeric},
+		{Name: "Quantidade", Mode: table.DscNumeric},
+	})
+
 	writer.Render()
 }
