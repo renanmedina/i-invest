@@ -1,0 +1,21 @@
+{
+  "id": 1,
+  "name": "Wallet example",
+  "client": {
+    "id": 232132,
+    "name": "client example"
+  },
+  "transactions": [
+    {
+      "transactionDate": "27/03/2023",
+      "kind": "buy",
+      "asset": {
+        "kind": "fii",
+        "ticker": "MXRF11",
+        "price": 10.35
+      },
+      "quantity": 1,
+      "total": 10.35
+    }
+  ]
+}
