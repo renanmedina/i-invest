@@ -36,8 +36,14 @@ func (w Wallet) Consolidate() Wallet {
 			continue
 		}
 
-		consolidated := ConsolidatedAsset{asset, transaction.TotalWithoutTaxes(), transaction.Quantity, transaction.AssetPrice()}
+		consolidated := NewConsolidatedAsset(asset, transaction.TotalWithoutTaxes(), transaction.Quantity, transaction.AssetPrice())
 		consolidationMap[asset.Ticker] = consolidated
+	}
+
+	walletTotal := w.Total()
+	for assetTicket, consolidation := range consolidationMap {
+		consolidation.PercentageOf(walletTotal)
+		consolidationMap[assetTicket] = consolidation
 	}
 
 	w.Consolidation = consolidationMap
