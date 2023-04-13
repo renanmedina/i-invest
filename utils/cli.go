@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"investment-warlock/investor"
-	"investment-warlock/market"
+	"investment-warlock/market/brapi"
 	"os"
 	"os/exec"
 	"strings"
@@ -56,19 +56,22 @@ func executeAction(option string, wallet investor.Wallet) {
 	case "2":
 		PrintConsolidation(wallet)
 	case "5":
-		displayMarketAsset()
+		displayMarketAsset(wallet)
 	}
 
 	fmt.Println("Pressione qualquer tecla para continuar ....")
 	readLine()
 }
 
-func displayMarketAsset() {
+func displayMarketAsset(wallet investor.Wallet) {
 	clear()
+	fmt.Println("===========================================================")
+	fmt.Println("              Consulta de Ativos da bolsa B3               ")
+	fmt.Println("===========================================================")
 	fmt.Print("Informe o codigo do ativo: ")
 	tickerCode := readLine()
-	fmt.Println("Buscando ....")
-	service := market.NewTicketService()
+	fmt.Println("Buscando, aguarde ....")
+	service := brapi.NewTicketService()
 	ticker, err := service.GetByCode(tickerCode)
 
 	if err != nil {
@@ -76,10 +79,7 @@ func displayMarketAsset() {
 		return
 	}
 
-	fmt.Println("===========================================================")
-	fmt.Printf("Ativo: %s \r\n", ticker.Code)
-	fmt.Printf("Nome: %s \r\n", ticker.Name)
-	fmt.Printf("Preço: %s \r\n", currencyFormat(ticker.Price))
-	fmt.Printf("Preço de ultimo fechamento: %s \r\n", currencyFormat(ticker.LastClosePrice))
-	fmt.Println("===========================================================")
+	var list []brapi.Ticker
+	list = append(list, ticker)
+	PrintMarketTicker(list, wallet)
 }

@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"investment-warlock/investor"
+	"investment-warlock/market/brapi"
 	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -59,5 +60,22 @@ func PrintTransactions(wallet investor.Wallet) {
 	}
 
 	writer.SortBy([]table.SortBy{{Name: "Data", Mode: table.Dsc}})
+	writer.Render()
+}
+
+func PrintMarketTicker(tickers []brapi.Ticker, wallet investor.Wallet) {
+	writer := makeWriter()
+	writer.AppendHeader(table.Row{"Ativo", "Nome", "Preço", "Ultimo Fechamento", "R$ na carteira", "% na carteira"})
+	for _, ticker := range tickers {
+		consolidated, _ := wallet.GetConsolidation(ticker.Code)
+		writer.AppendRow([]interface{}{
+			ticker.Code,
+			ticker.Name,
+			currencyFormat(ticker.Price),
+			currencyFormat(ticker.LastClosePrice),
+			currencyFormat(consolidated.TotalCost),
+			percentageFormat(consolidated.WalletPercentage),
+		})
+	}
 	writer.Render()
 }

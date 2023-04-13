@@ -24,6 +24,16 @@ func (w Wallet) Total() float64 {
 	return total
 }
 
+func (w Wallet) HasAsset(assetTicker string) bool {
+	_, alreadyOnMap := w.Consolidation[assetTicker]
+	return alreadyOnMap
+}
+
+func (w Wallet) GetConsolidation(assetTicker string) (ConsolidatedAsset, bool) {
+	consolidation, hasAsset := w.Consolidation[assetTicker]
+	return consolidation, hasAsset
+}
+
 func (w Wallet) Consolidate() Wallet {
 	consolidationMap := make(map[string]ConsolidatedAsset)
 
@@ -41,9 +51,9 @@ func (w Wallet) Consolidate() Wallet {
 	}
 
 	walletTotal := w.Total()
-	for assetTicket, consolidation := range consolidationMap {
+	for assetTicker, consolidation := range consolidationMap {
 		consolidation.PercentageOf(walletTotal)
-		consolidationMap[assetTicket] = consolidation
+		consolidationMap[assetTicker] = consolidation
 	}
 
 	w.Consolidation = consolidationMap

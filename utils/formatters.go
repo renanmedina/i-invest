@@ -28,3 +28,11 @@ func translateKind(kind string) string {
 
 	return kind
 }
+
+func formatBoolean(isValue bool) string {
+	if isValue {
+		return "Sim"
+	}
+
+	return "Não"
+}
