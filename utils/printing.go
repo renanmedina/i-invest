@@ -82,11 +82,17 @@ func PrintMarketTicker(tickers []brapi.Ticker, wallet investor.Wallet) {
 }
 
 func PrintBalancingSummary(suggestions []advisor.BalanceSuggestion) {
+	AssetKindLegend := map[string]string{
+		"stock":        "Ações",
+		"real_state":   "Fundos Imobiliários",
+		"fixed_income": "Renda Fixa",
+	}
+
 	writer := makeWriter()
 	writer.AppendHeader(table.Row{"Tipo de ativo", "% na carteira", "R$ na carteira", "% alvo", "Operação", "R$ Valor"})
 	for _, suggestion := range suggestions {
 		writer.AppendRow([]interface{}{
-			suggestion.AssetKind,
+			AssetKindLegend[suggestion.AssetKind],
 			percentageFormat(suggestion.CurrentPercentage),
 			currencyFormat(suggestion.CurrentTotal),
 			percentageFormat(suggestion.TargetPercentage),

@@ -5,9 +5,8 @@ import (
 )
 
 type BalanceSetup struct {
-	RealState   float64
-	Stocks      float64
-	FixedIncome float64
+	Kind       string
+	Percentage float64
 }
 
 type BalanceSuggestion struct {
@@ -19,8 +18,12 @@ type BalanceSuggestion struct {
 	OperationAmount   float64
 }
 
-func MakeBalanceSetup(realstate float64, stock float64, fixed_income float64) BalanceSetup {
-	return BalanceSetup{realstate / 100, stock / 100, fixed_income / 100}
+func MakeBalanceSetup(realstate float64, stock float64, fixed_income float64) []BalanceSetup {
+	return []BalanceSetup{
+		BalanceSetup{Kind: "real_state", Percentage: realstate / 100},
+		BalanceSetup{Kind: "stock", Percentage: stock / 100},
+		BalanceSetup{Kind: "fixed_income", Percentage: fixed_income / 100},
+	}
 }
 
 func NewBalanceSuggestion(kind string, currentPercent float64, currentTotal float64, targetPercentage float64, suggestionAmount float64) BalanceSuggestion {
@@ -34,43 +37,20 @@ func NewBalanceSuggestion(kind string, currentPercent float64, currentTotal floa
 	return BalanceSuggestion{kind, currentPercent, currentTotal, targetPercentage, operation, suggestionAmount}
 }
 
-func BalanceWalletByAssetType(wallet investor.Wallet, setup BalanceSetup) []BalanceSuggestion {
+func BalanceWalletByAssetType(wallet investor.Wallet, setups []BalanceSetup) []BalanceSuggestion {
 	var suggestions []BalanceSuggestion
 	walletTotal := wallet.Total()
 
-	if setup.Stocks > 0 {
-		kindTotalAmount := wallet.TotalForAssetKind("stock")
-		targetAmount := walletTotal * setup.Stocks
+	for _, setup := range setups {
+		kindTotalAmount := wallet.TotalForAssetKind(setup.Kind)
+		targetAmount := walletTotal * setup.Percentage
 		currentPercentage := 0.0
 		if kindTotalAmount > 0 {
 			currentPercentage = (kindTotalAmount / walletTotal) * 100
 		}
-		suggestionAmount := targetAmount - kindTotalAmount
-		suggestion := NewBalanceSuggestion("Ações", currentPercentage, kindTotalAmount, setup.Stocks*100, suggestionAmount)
-		suggestions = append(suggestions, suggestion)
-	}
 
-	if setup.RealState > 0 {
-		kindTotalAmount := wallet.TotalForAssetKind("real_state")
-		targetAmount := walletTotal * setup.RealState
-		currentPercentage := 0.0
-		if kindTotalAmount > 0 {
-			currentPercentage = (kindTotalAmount / walletTotal) * 100
-		}
 		suggestionAmount := targetAmount - kindTotalAmount
-		suggestion := NewBalanceSuggestion("Fundos Imobiliários", currentPercentage, kindTotalAmount, setup.RealState*100, suggestionAmount)
-		suggestions = append(suggestions, suggestion)
-	}
-
-	if setup.FixedIncome > 0 {
-		kindTotalAmount := wallet.TotalForAssetKind("fixed_income")
-		targetAmount := walletTotal * setup.RealState
-		currentPercentage := 0.0
-		if kindTotalAmount > 0 {
-			currentPercentage = (kindTotalAmount / walletTotal) * 100
-		}
-		suggestionAmount := targetAmount - kindTotalAmount
-		suggestion := NewBalanceSuggestion("Renda Fixa", currentPercentage, kindTotalAmount, setup.FixedIncome*100, suggestionAmount)
+		suggestion := NewBalanceSuggestion(setup.Kind, currentPercentage, kindTotalAmount, setup.Percentage*100, suggestionAmount)
 		suggestions = append(suggestions, suggestion)
 	}
 
