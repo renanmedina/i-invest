@@ -68,18 +68,16 @@ func displayMarketAsset(wallet investor.Wallet) {
 	fmt.Println("===========================================================")
 	fmt.Println("              Consulta de Ativos da bolsa B3               ")
 	fmt.Println("===========================================================")
-	fmt.Print("Informe o codigo do ativo: ")
-	tickerCode := readLine()
+	fmt.Print("Informe o codigo do ativo (passe separado por virgula para multipos): ")
+	tickerCodes := strings.Split(readLine(), ",")
 	fmt.Println("Buscando, aguarde ....")
-	service := brapi.NewTicketService()
-	ticker, err := service.GetByCode(tickerCode)
+	service := brapi.NewTickerService()
+	tickers, err := service.GetByCodes(tickerCodes)
 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	var list []brapi.Ticker
-	list = append(list, ticker)
-	PrintMarketTicker(list, wallet)
+	PrintMarketTicker(tickers, wallet)
 }
