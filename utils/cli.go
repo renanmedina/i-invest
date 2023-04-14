@@ -3,10 +3,12 @@ package utils
 import (
 	"bufio"
 	"fmt"
+	"investment-warlock/advisor"
 	"investment-warlock/investor"
 	"investment-warlock/market/brapi"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -50,11 +52,14 @@ func DisplayMenu(wallet investor.Wallet) {
 }
 
 func executeAction(option string, wallet investor.Wallet) {
+	clear()
 	switch option {
 	case "1":
 		PrintTransactions(wallet)
 	case "2":
 		PrintConsolidation(wallet)
+	case "3":
+		setupBalancer(wallet)
 	case "5":
 		displayMarketAsset(wallet)
 	}
@@ -64,7 +69,6 @@ func executeAction(option string, wallet investor.Wallet) {
 }
 
 func displayMarketAsset(wallet investor.Wallet) {
-	clear()
 	fmt.Println("===========================================================")
 	fmt.Println("              Consulta de Ativos da bolsa B3               ")
 	fmt.Println("===========================================================")
@@ -80,4 +84,27 @@ func displayMarketAsset(wallet investor.Wallet) {
 	}
 
 	PrintMarketTicker(tickers, wallet)
+}
+
+func setupBalancer(wallet investor.Wallet) {
+	clear()
+	fmt.Println("===========================================================")
+	fmt.Println("            Balancear Carteira de investimento             ")
+	fmt.Println("===========================================================")
+	fmt.Print("% em ações: ")
+	stock_percents, _ := strconv.ParseFloat(readLine(), 32)
+	fmt.Print("% em Fundos Imobiliários: ")
+	fii_percents, _ := strconv.ParseFloat(readLine(), 32)
+	fmt.Print("% em Renda fixa: ")
+	fixed_income_percents, _ := strconv.ParseFloat(readLine(), 32)
+	setup := advisor.MakeBalanceSetup(fii_percents, stock_percents, fixed_income_percents)
+	// setup := advisor.MakeBalanceSetup(40, 30, 30)
+	suggestions := advisor.BalanceWalletByAssetType(wallet, setup)
+	fmt.Println("Balanceando, aguarde ....")
+	fmt.Println("")
+	fmt.Println("Resultado do balanceamento:")
+	fmt.Println("")
+	fmt.Print("Total investido na carteira: R$ ", wallet.Total())
+	fmt.Println("")
+	PrintBalancingSummary(suggestions)
 }

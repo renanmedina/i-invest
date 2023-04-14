@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"investment-warlock/advisor"
 	"investment-warlock/investor"
 	"investment-warlock/market/brapi"
 	"os"
@@ -75,6 +76,22 @@ func PrintMarketTicker(tickers []brapi.Ticker, wallet investor.Wallet) {
 			currencyFormat(ticker.LastClosePrice),
 			currencyFormat(consolidated.TotalCost),
 			percentageFormat(consolidated.WalletPercentage),
+		})
+	}
+	writer.Render()
+}
+
+func PrintBalancingSummary(suggestions []advisor.BalanceSuggestion) {
+	writer := makeWriter()
+	writer.AppendHeader(table.Row{"Tipo de ativo", "% na carteira", "R$ na carteira", "% alvo", "Operação", "R$ Valor"})
+	for _, suggestion := range suggestions {
+		writer.AppendRow([]interface{}{
+			suggestion.AssetKind,
+			percentageFormat(suggestion.CurrentPercentage),
+			currencyFormat(suggestion.CurrentTotal),
+			percentageFormat(suggestion.TargetPercentage),
+			suggestion.Operation,
+			currencyFormat(suggestion.OperationAmount),
 		})
 	}
 	writer.Render()

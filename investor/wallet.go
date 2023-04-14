@@ -60,6 +60,17 @@ func (w Wallet) Consolidate() Wallet {
 	return w
 }
 
+func (w Wallet) TotalForAssetKind(targetKind string) float64 {
+	total := 0.0
+	for _, asset := range w.Consolidation {
+		if asset.HasKind(targetKind) {
+			total += asset.TotalCost
+		}
+	}
+
+	return total
+}
+
 func BuildWalletFromJsonFile(filepath string) Wallet {
 	jsonFile, err := os.Open(filepath)
 

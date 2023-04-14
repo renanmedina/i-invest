@@ -27,6 +27,10 @@ func (ca *ConsolidatedAsset) PercentageOf(amount float64) *ConsolidatedAsset {
 	return ca
 }
 
+func (ca ConsolidatedAsset) HasKind(kind string) bool {
+	return ca.Asset.Kind == kind
+}
+
 func NewConsolidatedAsset(asset Asset, total float64, quantity int, price float64) ConsolidatedAsset {
 	consolidated := ConsolidatedAsset{}
 	consolidated.Asset = asset
