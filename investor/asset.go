@@ -14,6 +14,10 @@ type ConsolidatedAsset struct {
 	WalletPercentage float64
 }
 
+func NewAsset(kind string, ticker string, price float64) Asset {
+	return Asset{Kind: kind, Ticker: ticker, Price: price}
+}
+
 func (ca ConsolidatedAsset) Add(transaction Transaction) ConsolidatedAsset {
 	ca.TotalCost += transaction.TotalWithoutTaxes()
 	ca.TotalQuantity += transaction.Quantity

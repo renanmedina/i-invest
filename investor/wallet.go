@@ -1,10 +1,13 @@
 package investor
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type Wallet struct {
@@ -13,6 +16,18 @@ type Wallet struct {
 	Client        Client        `json:"client"`
 	Transactions  []Transaction `json:"transactions"`
 	Consolidation map[string]ConsolidatedAsset
+}
+
+func NewWallet(id int64, name string, clientName string, transactions []Transaction) Wallet {
+	return Wallet{
+		Id:   id,
+		Name: name,
+		Client: Client{
+			Id:   id,
+			Name: clientName,
+		},
+		Transactions: transactions,
+	}
 }
 
 func (w Wallet) Total() float64 {
@@ -39,15 +54,16 @@ func (w Wallet) Consolidate() Wallet {
 
 	for _, transaction := range w.Transactions {
 		asset := transaction.Asset
-		consolidator, alreadyOnMap := consolidationMap[asset.Ticker]
+		ticker := asset.Ticker
+		consolidator, alreadyOnMap := consolidationMap[ticker]
 
 		if alreadyOnMap {
-			consolidator.Add(transaction)
+			consolidationMap[ticker] = consolidator.Add(transaction)
 			continue
 		}
 
 		consolidated := NewConsolidatedAsset(asset, transaction.TotalWithoutTaxes(), transaction.Quantity, transaction.AssetPrice())
-		consolidationMap[asset.Ticker] = consolidated
+		consolidationMap[ticker] = consolidated
 	}
 
 	walletTotal := w.Total()
@@ -87,4 +103,54 @@ func BuildWalletFromJsonFile(filepath string) Wallet {
 
 	wallet = wallet.Consolidate()
 	return wallet
+}
+
+func ImportFromCsv(filepath string) (Wallet, error) {
+	csvFile, err := os.Open(filepath)
+	transactions := []Transaction{}
+
+	if err != nil {
+		return Wallet{}, err
+	}
+
+	defer csvFile.Close()
+
+	csvReader := csv.NewReader(csvFile)
+	transactionsData, err := csvReader.ReadAll()
+
+	if err != nil {
+		return Wallet{}, err
+	}
+
+	for rowIndex, line := range transactionsData {
+		// ignore header
+		if rowIndex > 0 {
+			assetType := "stock"
+			if line[2] == "Mercado à Vista" {
+				assetType = "real_state"
+			}
+
+			quantity, _ := strconv.Atoi(line[6])
+			replacedPrice := strings.ReplaceAll(strings.ReplaceAll(line[7], "R$", ""), " ", "")
+			price, _ := strconv.ParseFloat(replacedPrice, 64)
+
+			if line[1] == "Venda" {
+				quantity *= -1
+			}
+
+			transaction := NewTransaction(
+				assetType,
+				line[5],
+				price,
+				quantity,
+				0.0,
+				line[0],
+			)
+
+			transactions = append(transactions, transaction)
+		}
+	}
+
+	wallet := NewWallet(1, "Wallet de testes", "Renan Medina", transactions).Consolidate()
+	return wallet, nil
 }

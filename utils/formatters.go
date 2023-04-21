@@ -20,6 +20,8 @@ func translateKind(kind string) string {
 	switch kind {
 	case "fii":
 		return "Fundos Imobiliários"
+	case "real_state":
+		return "Fundos Imobiliários"
 	case "stock":
 		return "Ações"
 	case "bdr":

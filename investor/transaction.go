@@ -8,6 +8,15 @@ type Transaction struct {
 	TransactionDate string
 }
 
+func NewTransaction(assetKind string, ticker string, price float64, quantity int, taxes float64, date string) Transaction {
+	asset := NewAsset(assetKind, ticker, price)
+	transactionType := "compra"
+	if quantity < 0 {
+		transactionType = "venda"
+	}
+	return Transaction{Kind: transactionType, Quantity: quantity, Taxes: taxes, TransactionDate: date, Asset: asset}
+}
+
 func (t Transaction) Total() float64 {
 	return (t.Asset.Price * float64(t.Quantity)) + t.Taxes
 }

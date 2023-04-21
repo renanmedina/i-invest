@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
-	wallet := investor.BuildWalletFromJsonFile("wallet.json")
+	// wallet := investor.BuildWalletFromJsonFile("wallet.json")
+	wallet, _ := investor.ImportFromCsv("transactions.csv")
 	utils.DisplayMenu(wallet)
 }
