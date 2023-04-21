@@ -20,11 +20,19 @@ func NewConsolidatorItem(grouper string, quantity int, avgPrice float64, total f
 	}
 }
 
+func (ci *ConsolidatorItem) Reset() *ConsolidatorItem {
+	ci.TotalQuantity = 0
+	ci.TotalCost = 0.0
+	ci.AveragePrice = 0.0
+	ci.WalletPercentage = 0.0
+	return ci
+}
+
 func (ci ConsolidatorItem) Add(transaction Transaction) ConsolidatorItem {
 	ci.TotalCost += transaction.TotalWithoutTaxes()
 	ci.TotalQuantity += transaction.Quantity
 	if ci.TotalQuantity <= 0 {
-		ci.AveragePrice = 0.0
+		ci.Reset()
 		return ci
 	}
 
@@ -34,12 +42,19 @@ func (ci ConsolidatorItem) Add(transaction Transaction) ConsolidatorItem {
 
 func (ci *ConsolidatorItem) PercentageOf(amount float64) *ConsolidatorItem {
 	percentage := ci.TotalCost * 100 / amount
+	if percentage < 0 {
+		percentage = 0.0
+	}
 	ci.WalletPercentage = percentage
 	return ci
 }
 
-func (ci ConsolidatorItem) HasKind(kind string) bool {
+func (ci ConsolidatorItem) HasGrouper(kind string) bool {
 	return ci.Grouper == kind
+}
+
+func (ci ConsolidatorItem) HasDetails(detail string) bool {
+	return ci.Details == detail
 }
 
 func ConsolidateByKind(wallet Wallet) map[string]ConsolidatorItem {

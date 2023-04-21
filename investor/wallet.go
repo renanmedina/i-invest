@@ -56,9 +56,9 @@ func (w Wallet) Consolidate() Wallet {
 
 func (w Wallet) TotalForAssetKind(targetKind string) float64 {
 	total := 0.0
-	for _, asset := range w.Consolidation {
-		if asset.HasKind(targetKind) {
-			total += asset.TotalCost
+	for _, consolidatorItem := range w.Consolidation {
+		if consolidatorItem.HasDetails(targetKind) {
+			total += consolidatorItem.TotalCost
 		}
 	}
 
