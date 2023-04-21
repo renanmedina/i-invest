@@ -25,6 +25,11 @@ func readLine() string {
 	return selected_option
 }
 
+func readOption() uint64 {
+	option, _ := strconv.ParseUint(readLine(), 10, 64)
+	return option
+}
+
 func DisplayMenu(wallet investor.Wallet) {
 	exit_action := "8"
 	for {
@@ -57,7 +62,9 @@ func executeAction(option string, wallet investor.Wallet) {
 	case "1":
 		PrintTransactions(wallet)
 	case "2":
-		PrintConsolidation(wallet)
+		PrintConsolidationByKind(wallet)
+		displayConsolidationDetails(wallet)
+		// PrintConsolidation(wallet)
 	case "3":
 		setupBalancer(wallet)
 	case "5":
@@ -107,4 +114,22 @@ func setupBalancer(wallet investor.Wallet) {
 	fmt.Print("Total investido na carteira: R$ ", wallet.Total())
 	fmt.Println("")
 	PrintBalancingSummary(suggestions)
+}
+
+func displayConsolidationDetails(wallet investor.Wallet) int {
+	fmt.Println("")
+	fmt.Println("1 - Exibir consolidação por ativo")
+	fmt.Println("2 - Exibir consolidação setor de ativo")
+	fmt.Println("3 - Voltar")
+	fmt.Print("Opção: ")
+	option := readOption()
+	switch option {
+	case 1:
+		PrintConsolidation(wallet)
+		return 0
+	case 2:
+		fmt.Println("Ainda não implementado")
+	}
+
+	return 0
 }

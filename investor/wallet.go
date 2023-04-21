@@ -15,7 +15,7 @@ type Wallet struct {
 	Name          string        `json:"name"`
 	Client        Client        `json:"client"`
 	Transactions  []Transaction `json:"transactions"`
-	Consolidation map[string]ConsolidatedAsset
+	Consolidation map[string]ConsolidatorItem
 }
 
 func NewWallet(id int64, name string, clientName string, transactions []Transaction) Wallet {
@@ -44,35 +44,13 @@ func (w Wallet) HasAsset(assetTicker string) bool {
 	return alreadyOnMap
 }
 
-func (w Wallet) GetConsolidation(assetTicker string) (ConsolidatedAsset, bool) {
+func (w Wallet) GetConsolidation(assetTicker string) (ConsolidatorItem, bool) {
 	consolidation, hasAsset := w.Consolidation[assetTicker]
 	return consolidation, hasAsset
 }
 
 func (w Wallet) Consolidate() Wallet {
-	consolidationMap := make(map[string]ConsolidatedAsset)
-
-	for _, transaction := range w.Transactions {
-		asset := transaction.Asset
-		ticker := asset.Ticker
-		consolidator, alreadyOnMap := consolidationMap[ticker]
-
-		if alreadyOnMap {
-			consolidationMap[ticker] = consolidator.Add(transaction)
-			continue
-		}
-
-		consolidated := NewConsolidatedAsset(asset, transaction.TotalWithoutTaxes(), transaction.Quantity, transaction.AssetPrice())
-		consolidationMap[ticker] = consolidated
-	}
-
-	walletTotal := w.Total()
-	for assetTicker, consolidation := range consolidationMap {
-		consolidation.PercentageOf(walletTotal)
-		consolidationMap[assetTicker] = consolidation
-	}
-
-	w.Consolidation = consolidationMap
+	w.Consolidation = ConsolidateByAsset(w)
 	return w
 }
 
