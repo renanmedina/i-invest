@@ -4,19 +4,19 @@ import (
 	"fmt"
 )
 
-func currencyFormat(price float64) string {
-	return fmt.Sprintf("R$ %v", numberFormat(price))
+func CurrencyFormat(price float64) string {
+	return fmt.Sprintf("R$ %v", NumberFormat(price))
 }
 
-func percentageFormat(percent float64) string {
-	return fmt.Sprintf("%v%%", numberFormat(percent))
+func PercentageFormat(percent float64) string {
+	return fmt.Sprintf("%v%%", NumberFormat(percent))
 }
 
-func numberFormat(number float64) string {
+func NumberFormat(number float64) string {
 	return fmt.Sprintf("%.2f", number)
 }
 
-func translateKind(kind string) string {
+func TranslateKind(kind string) string {
 	switch kind {
 	case "fii":
 		return "Fundos Imobiliários"
