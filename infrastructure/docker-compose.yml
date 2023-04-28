@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  database:
+    image: surrealdb/surrealdb:latest
+    container_name: investment-warlock-db
+    ports: 
+      - 8000:8000
+    volumes:
+      - "db-data:/mydata"
+    command: "start --log trace --user root --pass root file:/mydata/investment-warlock.db"
+volumes:
+  db-data:
+    driver: "local"
