@@ -38,7 +38,7 @@ func printMarketTickers(tickers []brapi.Ticker, wallet investor.Wallet) {
 			ticker.Name,
 			utils.CurrencyFormat(ticker.Price),
 			utils.CurrencyFormat(ticker.LastClosePrice),
-			utils.CurrencyFormat(consolidated.TotalCost),
+			utils.CurrencyFormat(consolidated.AverageAmount),
 			utils.PercentageFormat(consolidated.WalletPercentage),
 		})
 	}

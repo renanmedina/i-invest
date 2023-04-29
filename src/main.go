@@ -1,11 +1,11 @@
 package main
 
 import (
-	"investment-warlock/investor"
+	"investment-warlock/importers"
 )
 
 func main() {
 	// wallet := investor.BuildWalletFromJsonFile("wallet.json")
-	wallet, _ := investor.ImportFromCsv("transactions.csv")
+	wallet, _ := importers.ImportFromB3Csv("transactions.csv")
 	DisplayMenu(wallet)
 }

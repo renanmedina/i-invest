@@ -10,7 +10,7 @@ import (
 func DisplayMenu(wallet investor.Wallet) {
 	exit_action := "8"
 	for {
-		utils.ClearConsole()
+		// utils.ClearConsole()
 		fmt.Println("===========================================================")
 		fmt.Println("Olá, sr. investidor o que deseja fazer?")
 		fmt.Println("1 - Listar transações")

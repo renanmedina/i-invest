@@ -1,13 +1,10 @@
 package investor
 
 import (
-	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strconv"
-	"strings"
 )
 
 type Wallet struct {
@@ -58,7 +55,7 @@ func (w Wallet) TotalForAssetKind(targetKind string) float64 {
 	total := 0.0
 	for _, consolidatorItem := range w.Consolidation {
 		if consolidatorItem.HasDetails(targetKind) {
-			total += consolidatorItem.TotalCost
+			total += consolidatorItem.AverageAmount
 		}
 	}
 
@@ -81,54 +78,4 @@ func BuildWalletFromJsonFile(filepath string) Wallet {
 
 	wallet = wallet.Consolidate()
 	return wallet
-}
-
-func ImportFromCsv(filepath string) (Wallet, error) {
-	csvFile, err := os.Open(filepath)
-	transactions := []Transaction{}
-
-	if err != nil {
-		return Wallet{}, err
-	}
-
-	defer csvFile.Close()
-
-	csvReader := csv.NewReader(csvFile)
-	transactionsData, err := csvReader.ReadAll()
-
-	if err != nil {
-		return Wallet{}, err
-	}
-
-	for rowIndex, line := range transactionsData {
-		// ignore header
-		if rowIndex > 0 {
-			assetType := "stock"
-			if line[2] == "Mercado à Vista" {
-				assetType = "real_state"
-			}
-
-			quantity, _ := strconv.Atoi(line[6])
-			replacedPrice := strings.ReplaceAll(strings.ReplaceAll(line[7], "R$", ""), " ", "")
-			price, _ := strconv.ParseFloat(replacedPrice, 64)
-
-			if line[1] == "Venda" {
-				quantity *= -1
-			}
-
-			transaction := NewTransaction(
-				assetType,
-				line[5],
-				price,
-				quantity,
-				0.0,
-				line[0],
-			)
-
-			transactions = append(transactions, transaction)
-		}
-	}
-
-	wallet := NewWallet(1, "Wallet de testes", "Renan Medina", transactions).Consolidate()
-	return wallet, nil
 }

@@ -49,3 +49,19 @@ func (ts *TickerService) GetByCodes(tickerCodes []string) ([]Ticker, error) {
 
 	return tickers, nil
 }
+
+func (ts *TickerService) GetPricesByCodes(tickerCodes []string) (map[string]float64, error) {
+	prices := make(map[string]float64)
+
+	tickers, err := ts.GetByCodes(tickerCodes)
+
+	if err != nil {
+		return prices, err
+	}
+
+	for _, ticker := range tickers {
+		prices[ticker.Code] = ticker.Price
+	}
+
+	return prices, nil
+}

@@ -22,7 +22,7 @@ func printConsolidationByKind(wallet investor.Wallet) {
 	for _, consolidatedGroup := range consolidation {
 		assetType := utils.TranslateKind(consolidatedGroup.Grouper)
 		averagePrice := utils.CurrencyFormat(consolidatedGroup.AveragePrice)
-		total := utils.CurrencyFormat(consolidatedGroup.TotalCost)
+		total := utils.CurrencyFormat(consolidatedGroup.AverageAmount)
 		percentage := utils.PercentageFormat(consolidatedGroup.WalletPercentage)
 
 		writer.AppendRow([]interface{}{
@@ -62,15 +62,29 @@ func displayConsolidationSubmenu(wallet investor.Wallet) {
 func printConsolidationByAsset(wallet investor.Wallet) {
 	utils.PrintWalletHeader(wallet)
 	writer := utils.NewTableWriter()
-	writer.AppendHeader(table.Row{"Ativo", "Tipo", "Quantidade", "Preço Médio", "Total", "% Carteira"})
+	writer.AppendHeader(table.Row{"Ativo", "Tipo", "Quantidade", "Preço Médio", "Preço atual", "R$ Patrimonio atual", "% Carteira", "% Variação", "R$ Total variação"})
 	for _, consolidatedAsset := range wallet.Consolidation {
 		assetType := utils.TranslateKind(consolidatedAsset.Details)
 		quantity := consolidatedAsset.TotalQuantity
 		averagePrice := utils.CurrencyFormat(consolidatedAsset.AveragePrice)
-		total := utils.CurrencyFormat(consolidatedAsset.TotalCost)
+		total := utils.CurrencyFormat(consolidatedAsset.CurrentAmount)
 		percentage := utils.PercentageFormat(consolidatedAsset.WalletPercentage)
 
-		writer.AppendRow([]interface{}{consolidatedAsset.Grouper, assetType, quantity, averagePrice, total, percentage})
+		assetCurrentPrice := utils.CurrencyFormat(consolidatedAsset.AssetCurrentPrice)
+		variationPercentage := utils.PercentageFormat(consolidatedAsset.VariationPercentage)
+		variationAmount := utils.CurrencyFormat(consolidatedAsset.VariationAmount)
+
+		writer.AppendRow([]interface{}{
+			consolidatedAsset.Grouper,
+			assetType,
+			quantity,
+			averagePrice,
+			assetCurrentPrice,
+			total,
+			percentage,
+			variationPercentage,
+			variationAmount,
+		})
 	}
 
 	writer.SortBy([]table.SortBy{

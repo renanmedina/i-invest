@@ -1,12 +1,23 @@
 package investor
 
+import (
+	"fmt"
+	"investment-warlock/market/brapi"
+	"math"
+)
+
 type ConsolidatorItem struct {
-	Grouper          string
-	TotalQuantity    int
-	AveragePrice     float64
-	TotalCost        float64
-	WalletPercentage float64
-	Details          string
+	Grouper             string
+	TotalQuantity       int
+	AveragePrice        float64
+	PaidCost            float64
+	AverageAmount       float64
+	CurrentAmount       float64
+	WalletPercentage    float64
+	Details             string
+	VariationPercentage float64
+	VariationAmount     float64
+	AssetCurrentPrice   float64
 }
 
 func NewConsolidatorItem(grouper string, quantity int, avgPrice float64, total float64, percentage float64, details string) ConsolidatorItem {
@@ -15,37 +26,57 @@ func NewConsolidatorItem(grouper string, quantity int, avgPrice float64, total f
 		quantity,
 		avgPrice,
 		total,
+		total,
+		total,
 		percentage,
 		details,
+		0,
+		0,
+		0,
 	}
 }
 
 func (ci *ConsolidatorItem) Reset() *ConsolidatorItem {
 	ci.TotalQuantity = 0
-	ci.TotalCost = 0.0
+	ci.PaidCost = 0.0
+	ci.AverageAmount = 0.0
 	ci.AveragePrice = 0.0
 	ci.WalletPercentage = 0.0
 	return ci
 }
 
 func (ci ConsolidatorItem) Add(transaction Transaction) ConsolidatorItem {
-	ci.TotalCost += transaction.TotalWithoutTaxes()
+	ci.PaidCost += transaction.TotalWithoutTaxes()
 	ci.TotalQuantity += transaction.Quantity
 	if ci.TotalQuantity <= 0 {
 		ci.Reset()
 		return ci
 	}
 
-	ci.AveragePrice = ci.TotalCost / float64(ci.TotalQuantity)
+	ci.AveragePrice = roundFloat(ci.PaidCost / float64(ci.TotalQuantity))
+	ci.AverageAmount = roundFloat(float64(ci.TotalQuantity) * ci.AveragePrice)
 	return ci
 }
 
 func (ci *ConsolidatorItem) PercentageOf(amount float64) *ConsolidatorItem {
-	percentage := ci.TotalCost * 100 / amount
+	percentage := ci.PaidCost * 100 / amount
 	if percentage < 0 {
 		percentage = 0.0
 	}
 	ci.WalletPercentage = percentage
+	return ci
+}
+
+func (ci *ConsolidatorItem) CurrentPrice(price float64) *ConsolidatorItem {
+	totalForPrice := roundFloat(price * float64(ci.TotalQuantity))
+	ci.AverageAmount = roundFloat(ci.AveragePrice * float64(ci.TotalQuantity))
+	variationAmount := roundFloat(totalForPrice - ci.AverageAmount)
+	variationPercentage := roundFloat((variationAmount * 100) / ci.AverageAmount)
+
+	ci.CurrentAmount = totalForPrice
+	ci.AssetCurrentPrice = price
+	ci.VariationPercentage = variationPercentage
+	ci.VariationAmount = variationAmount
 	return ci
 }
 
@@ -66,12 +97,12 @@ func ConsolidateByKind(wallet Wallet) map[string]ConsolidatorItem {
 		byKindConsolidator, existsInMap := byKind[assetKind]
 
 		if !existsInMap {
-			byKindConsolidator = ConsolidatorItem{assetKind, 0, 0.0, 0.0, 0.0, ""}
+			byKindConsolidator = NewConsolidatorItem(assetKind, 0, 0.0, 0.0, 0.0, "")
 		}
 
 		byKindConsolidator.TotalQuantity += consolidated.TotalQuantity
-		byKindConsolidator.AveragePrice = byKindConsolidator.TotalCost / float64(byKindConsolidator.TotalQuantity)
-		byKindConsolidator.TotalCost += consolidated.TotalCost
+		byKindConsolidator.AveragePrice = byKindConsolidator.AverageAmount / float64(byKindConsolidator.TotalQuantity)
+		byKindConsolidator.AverageAmount += consolidated.AverageAmount
 		byKindConsolidator.PercentageOf(walletTotal)
 		byKind[assetKind] = byKindConsolidator
 	}
@@ -81,6 +112,7 @@ func ConsolidateByKind(wallet Wallet) map[string]ConsolidatorItem {
 
 func ConsolidateByAsset(wallet Wallet) map[string]ConsolidatorItem {
 	consolidationMap := make(map[string]ConsolidatorItem)
+	tickers := []string{}
 
 	for _, transaction := range wallet.Transactions {
 		asset := transaction.Asset
@@ -88,6 +120,7 @@ func ConsolidateByAsset(wallet Wallet) map[string]ConsolidatorItem {
 		consolidator, alreadyOnMap := consolidationMap[ticker]
 
 		if !alreadyOnMap {
+			tickers = append(tickers, ticker)
 			consolidator = NewConsolidatorItem(ticker, 0, 0.0, 0.0, 0.0, asset.Kind)
 		}
 
@@ -95,11 +128,25 @@ func ConsolidateByAsset(wallet Wallet) map[string]ConsolidatorItem {
 		consolidationMap[ticker] = consolidator
 	}
 
+	tickerService := brapi.NewTickerService()
+	currentPrices, err := tickerService.GetPricesByCodes(tickers)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	walletTotal := wallet.Total()
 	for assetTicker, consolidation := range consolidationMap {
 		consolidation.PercentageOf(walletTotal)
+		currentPrice := currentPrices[assetTicker]
+		consolidation.CurrentPrice(currentPrice)
 		consolidationMap[assetTicker] = consolidation
 	}
 
 	return consolidationMap
+}
+
+func roundFloat(amount float64) float64 {
+	ratio := math.Pow(10, float64(2))
+	return math.Round(amount*ratio) / ratio
 }
