@@ -71,7 +71,10 @@ func (ci *ConsolidatorItem) CurrentPrice(price float64) *ConsolidatorItem {
 	totalForPrice := roundFloat(price * float64(ci.TotalQuantity))
 	ci.AverageAmount = roundFloat(ci.AveragePrice * float64(ci.TotalQuantity))
 	variationAmount := roundFloat(totalForPrice - ci.AverageAmount)
-	variationPercentage := roundFloat((variationAmount * 100) / ci.AverageAmount)
+	variationPercentage := 0.0
+	if variationAmount != 0 {
+		variationPercentage = roundFloat((variationAmount * 100) / ci.AverageAmount)
+	}
 
 	ci.CurrentAmount = totalForPrice
 	ci.AssetCurrentPrice = price
@@ -103,6 +106,15 @@ func ConsolidateByKind(wallet Wallet) map[string]ConsolidatorItem {
 		byKindConsolidator.TotalQuantity += consolidated.TotalQuantity
 		byKindConsolidator.AveragePrice = byKindConsolidator.AverageAmount / float64(byKindConsolidator.TotalQuantity)
 		byKindConsolidator.AverageAmount += consolidated.AverageAmount
+		byKindConsolidator.CurrentAmount += consolidated.CurrentAmount
+		byKindConsolidator.PaidCost += consolidated.PaidCost
+		byKindConsolidator.VariationAmount += consolidated.VariationAmount
+		variationPercent := 0.0
+		if byKindConsolidator.CurrentAmount != 0 {
+			variationPercent = roundFloat((byKindConsolidator.VariationAmount * 100) / byKindConsolidator.CurrentAmount)
+		}
+
+		byKindConsolidator.VariationPercentage = variationPercent
 		byKindConsolidator.PercentageOf(walletTotal)
 		byKind[assetKind] = byKindConsolidator
 	}
@@ -135,11 +147,16 @@ func ConsolidateByAsset(wallet Wallet) map[string]ConsolidatorItem {
 		fmt.Println(err)
 	}
 
-	walletTotal := wallet.Total()
+	walletTotal := 0.0
 	for assetTicker, consolidation := range consolidationMap {
-		consolidation.PercentageOf(walletTotal)
 		currentPrice := currentPrices[assetTicker]
 		consolidation.CurrentPrice(currentPrice)
+		walletTotal += consolidation.CurrentAmount
+		consolidationMap[assetTicker] = consolidation
+	}
+
+	for assetTicker, consolidation := range consolidationMap {
+		consolidation.PercentageOf(walletTotal)
 		consolidationMap[assetTicker] = consolidation
 	}
 

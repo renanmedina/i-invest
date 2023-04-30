@@ -29,8 +29,8 @@ func NewWallet(id int64, name string, clientName string, transactions []Transact
 
 func (w Wallet) Total() float64 {
 	total := 0.0
-	for _, transaction := range w.Transactions {
-		total += transaction.Total()
+	for _, consolidatorItem := range w.Consolidation {
+		total += consolidatorItem.CurrentAmount
 	}
 
 	return total

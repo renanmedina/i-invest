@@ -16,14 +16,16 @@ func DisplayConsolidation(wallet investor.Wallet) {
 func printConsolidationByKind(wallet investor.Wallet) {
 	utils.PrintWalletHeader(wallet)
 	writer := utils.NewTableWriter()
-	writer.AppendHeader(table.Row{"Tipo", "Quantidade", "Preço Médio", "Total", "% Carteira"})
+	writer.AppendHeader(table.Row{"Tipo", "Quantidade", "Preço Médio", "R$ Patrimonio atual", "% Carteira", "% Variação", "R$ Total variação"})
 	consolidation := investor.ConsolidateByKind(wallet)
 
 	for _, consolidatedGroup := range consolidation {
 		assetType := utils.TranslateKind(consolidatedGroup.Grouper)
 		averagePrice := utils.CurrencyFormat(consolidatedGroup.AveragePrice)
-		total := utils.CurrencyFormat(consolidatedGroup.AverageAmount)
+		total := utils.CurrencyFormat(consolidatedGroup.CurrentAmount)
 		percentage := utils.PercentageFormat(consolidatedGroup.WalletPercentage)
+		variationPercentage := utils.PercentageFormat(consolidatedGroup.VariationPercentage)
+		variationAmount := utils.CurrencyFormat(consolidatedGroup.VariationAmount)
 
 		writer.AppendRow([]interface{}{
 			assetType,
@@ -31,6 +33,8 @@ func printConsolidationByKind(wallet investor.Wallet) {
 			averagePrice,
 			total,
 			percentage,
+			variationPercentage,
+			variationAmount,
 		})
 	}
 
@@ -52,18 +56,28 @@ func displayConsolidationSubmenu(wallet investor.Wallet) {
 	option := utils.ReadOption()
 	switch option {
 	case 1:
-		printConsolidationByAsset(wallet)
+		fmt.Println("Selecionar apenas por classe de ativo: ")
+		fmt.Println("1 - Fundos Imobiliários")
+		fmt.Println("2 - Ações")
+		fmt.Println("3 - Todos")
+		filterOption := utils.ReadOption()
+		filterType := translateTypeFromOption(filterOption)
+		printConsolidationByAsset(wallet, filterType)
 		break
 	case 2:
 		fmt.Println("Ainda não implementado")
 	}
 }
 
-func printConsolidationByAsset(wallet investor.Wallet) {
+func printConsolidationByAsset(wallet investor.Wallet, filterType string) {
 	utils.PrintWalletHeader(wallet)
 	writer := utils.NewTableWriter()
 	writer.AppendHeader(table.Row{"Ativo", "Tipo", "Quantidade", "Preço Médio", "Preço atual", "R$ Patrimonio atual", "% Carteira", "% Variação", "R$ Total variação"})
 	for _, consolidatedAsset := range wallet.Consolidation {
+		if filterType != "" && consolidatedAsset.Details != filterType {
+			continue
+		}
+
 		assetType := utils.TranslateKind(consolidatedAsset.Details)
 		quantity := consolidatedAsset.TotalQuantity
 		averagePrice := utils.CurrencyFormat(consolidatedAsset.AveragePrice)
@@ -94,4 +108,15 @@ func printConsolidationByAsset(wallet investor.Wallet) {
 	})
 
 	writer.Render()
+}
+
+func translateTypeFromOption(option uint64) string {
+	switch option {
+	case 1:
+		return "real_state"
+	case 2:
+		return "stock"
+	}
+
+	return ""
 }

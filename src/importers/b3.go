@@ -57,7 +57,8 @@ func ImportFromB3Csv(filepath string) (investor.Wallet, error) {
 
 func parseTransactionLine(csvLine []string) CsvTransationItem {
 	assetType := "stock"
-	if csvLine[2] == "Mercado à Vista" {
+	tickerId := csvLine[5][len(csvLine[5])-2:]
+	if csvLine[2] == "Mercado à Vista" && tickerId == "11" {
 		assetType = "real_state"
 	}
 
