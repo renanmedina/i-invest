@@ -8,21 +8,18 @@ import (
 )
 
 type Wallet struct {
-	Id            int64         `json:"id"`
+	Id            string        `json:"id,omitempty"`
 	Name          string        `json:"name"`
 	Client        Client        `json:"client"`
 	Transactions  []Transaction `json:"transactions"`
 	Consolidation map[string]ConsolidatorItem
 }
 
-func NewWallet(id int64, name string, clientName string, transactions []Transaction) Wallet {
+func NewWallet(id string, name string, clientName string, transactions []Transaction) Wallet {
 	return Wallet{
-		Id:   id,
-		Name: name,
-		Client: Client{
-			Id:   id,
-			Name: clientName,
-		},
+		Id:           id,
+		Name:         name,
+		Client:       NewClient(id, clientName, "renan@silvamedina.com.br"),
 		Transactions: transactions,
 	}
 }
@@ -57,6 +54,16 @@ func (w Wallet) VariationPercentage() float64 {
 	}
 
 	return percentage
+}
+
+func (w Wallet) Quantity() int {
+	quantity := 0
+
+	for _, transaction := range w.Transactions {
+		quantity += transaction.Quantity
+	}
+
+	return quantity
 }
 
 func (w Wallet) HasAsset(assetTicker string) bool {
@@ -101,4 +108,25 @@ func BuildWalletFromJsonFile(filepath string) Wallet {
 
 	wallet = wallet.Consolidate()
 	return wallet
+}
+
+func (w Wallet) TransactionsMap() []map[string]interface{} {
+	transactions := []map[string]interface{}{}
+
+	for _, transaction := range w.Transactions {
+		transactions = append(transactions, transaction.ToMap())
+	}
+
+	fmt.Println(transactions)
+	return transactions
+}
+
+func (w *Wallet) ToMap() map[string]interface{} {
+	return map[string]interface{}{
+		"id":             fmt.Sprintf("wallets:%s", w.Client.Email),
+		"current_total":  w.Total(),
+		"total_invested": w.TotalInvested(),
+		"quantity":       w.Quantity(),
+		"client":         w.Client.ToMap(),
+	}
 }

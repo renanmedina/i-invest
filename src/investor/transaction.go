@@ -1,6 +1,7 @@
 package investor
 
 type Transaction struct {
+	Id              string
 	Kind            string
 	Quantity        int
 	Taxes           float64
@@ -31,4 +32,16 @@ func (t Transaction) Ticker() string {
 
 func (t Transaction) AssetPrice() float64 {
 	return t.Asset.Price
+}
+
+func (t Transaction) ToMap() map[string]interface{} {
+	return map[string]interface{}{
+		"transaction_date": t.TransactionDate,
+		"transaction_type": t.Kind,
+		"ticker":           t.Asset.Ticker,
+		"asset_type":       t.Asset.Kind,
+		"asset_price":      t.AssetPrice(),
+		"quantity":         t.Quantity,
+		"total":            t.Total(),
+	}
 }

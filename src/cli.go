@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"investment-warlock/investor"
+	wallet_repository "investment-warlock/investor/repositories"
 	"investment-warlock/use_cases"
 	"investment-warlock/utils"
 )
 
 func DisplayMenu(wallet investor.Wallet) {
-	exit_action := "8"
+	exit_action := "9"
 	for {
 		// utils.ClearConsole()
 		fmt.Println("===========================================================")
@@ -20,6 +21,7 @@ func DisplayMenu(wallet investor.Wallet) {
 		fmt.Println("5 - Consultar ativo")
 		fmt.Println("6 - Ranking de ativos")
 		fmt.Println("7 - Dividendos")
+		fmt.Println("8 - Salvar carteira")
 		fmt.Println(exit_action, "- Sair")
 		fmt.Println("===========================================================")
 
@@ -43,9 +45,10 @@ func executeAction(option string, wallet investor.Wallet) {
 	case "3":
 		use_cases.BalanceWallet(wallet)
 	case "4":
-
 	case "5":
 		use_cases.SearchAsset(wallet)
+	case "8":
+		wallet_repository.Save(wallet)
 	}
 
 	fmt.Println("Pressione qualquer tecla para continuar ....")

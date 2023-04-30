@@ -51,7 +51,7 @@ func ImportFromB3Csv(filepath string) (investor.Wallet, error) {
 		}
 	}
 
-	wallet := investor.NewWallet(1, "Wallet de testes", "Renan Medina", transactions).Consolidate()
+	wallet := investor.NewWallet("1", "Wallet de testes", "Renan Medina", transactions).Consolidate()
 	return wallet, nil
 }
 
