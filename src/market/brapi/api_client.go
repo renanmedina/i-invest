@@ -25,9 +25,8 @@ func (c *ApiClient[T]) makeUrl(path string) string {
 
 func parseResult[T any](data []byte) ApiResult[T] {
 	var resultData ApiResult[T]
-	// fmt.Println(string(data))
 	err := json.Unmarshal(data, &resultData)
-	// fmt.Println(resultData.Results)
+
 	if err != nil {
 		fmt.Println(err)
 	}
