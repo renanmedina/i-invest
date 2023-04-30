@@ -36,6 +36,29 @@ func (w Wallet) Total() float64 {
 	return total
 }
 
+func (w Wallet) TotalInvested() float64 {
+	total := 0.0
+	for _, transaction := range w.Transactions {
+		total += transaction.Total()
+	}
+
+	return total
+}
+
+func (w Wallet) VariationPercentage() float64 {
+	percentage := 0.0
+	totalAmount := w.Total()
+	totalInvested := w.TotalInvested()
+
+	if totalAmount != 0 {
+		differenceAmount := totalAmount - totalInvested
+		fmt.Println(differenceAmount)
+		percentage = (differenceAmount * 100) / totalInvested
+	}
+
+	return percentage
+}
+
 func (w Wallet) HasAsset(assetTicker string) bool {
 	_, alreadyOnMap := w.Consolidation[assetTicker]
 	return alreadyOnMap

@@ -12,7 +12,9 @@ func PrintWalletHeader(wallet investor.Wallet) {
 	fmt.Println("===========================================================")
 	fmt.Println("Wallet: ", wallet.Name)
 	fmt.Println("Cliente: ", wallet.Client.Name)
-	fmt.Println("Total da carteira: ", CurrencyFormat(wallet.Total()))
+	fmt.Println("Patrimonio atual: ", CurrencyFormat(wallet.Total()))
+	fmt.Println("Investimento realizado: ", CurrencyFormat(wallet.TotalInvested()))
+	fmt.Println("% variação: ", PercentageFormat(wallet.VariationPercentage()))
 }
 
 func NewTableWriter() table.Writer {
