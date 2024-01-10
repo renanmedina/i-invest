@@ -1,4 +1,4 @@
-package investor
+package management
 
 import (
 	"fmt"

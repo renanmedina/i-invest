@@ -1,11 +1,10 @@
-package repositories
+package management
 
 import (
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"github.com/renanmedina/investment-warlock/investments-service/utils"
 )
 
-func SaveTransaction(transaction investor.Transaction) investor.Transaction {
+func SaveTransaction(transaction Transaction) Transaction {
 	db := utils.GetDatabase()
 
 	// try creating if fails probably exists then updated (should improve this in the future)

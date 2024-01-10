@@ -1,23 +1,22 @@
-package use_cases
+package management
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"github.com/renanmedina/investment-warlock/investments-service/utils"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 
-func DisplayConsolidation(wallet investor.Wallet) {
+func DisplayConsolidation(wallet Wallet) {
 	printConsolidationByKind(wallet)
 	displayConsolidationSubmenu(wallet)
 }
 
-func printConsolidationByKind(wallet investor.Wallet) {
-	utils.PrintWalletHeader(wallet)
+func printConsolidationByKind(wallet Wallet) {
+	wallet.PrintWalletHeader()
 	writer := utils.NewTableWriter()
 	writer.AppendHeader(table.Row{"Tipo", "Quantidade", "Preço Médio", "R$ Patrimonio atual", "% Carteira", "% Variação", "R$ Total variação"})
-	consolidation := investor.ConsolidateByKind(wallet)
+	consolidation := ConsolidateByKind(wallet)
 
 	for _, consolidatedGroup := range consolidation {
 		assetType := utils.TranslateKind(consolidatedGroup.Grouper)
@@ -47,7 +46,7 @@ func printConsolidationByKind(wallet investor.Wallet) {
 	writer.Render()
 }
 
-func displayConsolidationSubmenu(wallet investor.Wallet) {
+func displayConsolidationSubmenu(wallet Wallet) {
 	fmt.Println("")
 	fmt.Println("1 - Exibir consolidação por ativo")
 	fmt.Println("2 - Exibir consolidação setor de ativo")
@@ -69,8 +68,8 @@ func displayConsolidationSubmenu(wallet investor.Wallet) {
 	}
 }
 
-func printConsolidationByAsset(wallet investor.Wallet, filterType string) {
-	utils.PrintWalletHeader(wallet)
+func printConsolidationByAsset(wallet Wallet, filterType string) {
+	wallet.PrintWalletHeader()
 	writer := utils.NewTableWriter()
 	writer.AppendHeader(table.Row{"Ativo", "Tipo", "Quantidade", "Preço Médio", "Preço atual", "R$ Patrimonio atual", "% Carteira", "% Variação", "R$ Total variação"})
 	for _, consolidatedAsset := range wallet.Consolidation {

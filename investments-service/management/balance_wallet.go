@@ -1,15 +1,12 @@
-package use_cases
+package management
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/advisor"
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"github.com/renanmedina/investment-warlock/investments-service/utils"
-
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 
-func BalanceWallet(wallet investor.Wallet) {
+func BalanceWallet(wallet Wallet) {
 	suggestions := setupBalancer(wallet)
 	fmt.Println("")
 	fmt.Println("Resultado do balanceamento:")
@@ -19,7 +16,7 @@ func BalanceWallet(wallet investor.Wallet) {
 	printBalancingSummary(suggestions)
 }
 
-func setupBalancer(wallet investor.Wallet) []advisor.BalanceSuggestion {
+func setupBalancer(wallet Wallet) []BalanceSuggestion {
 	utils.ClearConsole()
 	fmt.Println("===========================================================")
 	fmt.Println("            Balancear Carteira de investimento             ")
@@ -30,13 +27,13 @@ func setupBalancer(wallet investor.Wallet) []advisor.BalanceSuggestion {
 	fii_percents := utils.ReadFloat()
 	fmt.Print("% em Renda fixa: ")
 	fixed_income_percents := utils.ReadFloat()
-	setup := advisor.MakeBalanceSetup(fii_percents, stock_percents, fixed_income_percents)
+	setup := MakeBalanceSetup(fii_percents, stock_percents, fixed_income_percents)
 	fmt.Println("Balanceando, aguarde ....")
-	suggestions := advisor.BalanceWalletByAssetType(wallet, setup)
+	suggestions := BalanceWalletByAssetType(wallet, setup)
 	return suggestions
 }
 
-func printBalancingSummary(suggestions []advisor.BalanceSuggestion) {
+func printBalancingSummary(suggestions []BalanceSuggestion) {
 	AssetKindLegend := map[string]string{
 		"stock":        "Ações",
 		"real_state":   "Fundos Imobiliários",

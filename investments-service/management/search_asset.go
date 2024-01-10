@@ -1,8 +1,7 @@
-package use_cases
+package management
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"github.com/renanmedina/investment-warlock/investments-service/market/brapi"
 	"github.com/renanmedina/investment-warlock/investments-service/utils"
 	"strings"
@@ -10,7 +9,7 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 
-func SearchAsset(wallet investor.Wallet) {
+func SearchAsset(wallet Wallet) {
 	fmt.Println("===========================================================")
 	fmt.Println("              Consulta de Ativos da bolsa B3               ")
 	fmt.Println("===========================================================")
@@ -28,7 +27,7 @@ func SearchAsset(wallet investor.Wallet) {
 	printMarketTickers(tickers, wallet)
 }
 
-func printMarketTickers(tickers []brapi.Ticker, wallet investor.Wallet) {
+func printMarketTickers(tickers []brapi.Ticker, wallet Wallet) {
 	writer := utils.NewTableWriter()
 	writer.AppendHeader(table.Row{"Ativo", "Nome", "Preço", "Ultimo Fechamento", "R$ na carteira", "% na carteira"})
 	for _, ticker := range tickers {

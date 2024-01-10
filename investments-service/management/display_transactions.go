@@ -1,14 +1,13 @@
-package use_cases
+package management
 
 import (
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"github.com/renanmedina/investment-warlock/investments-service/utils"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 
-func DisplayTransactions(wallet investor.Wallet) {
-	utils.PrintWalletHeader(wallet)
+func DisplayTransactions(wallet Wallet) {
+	wallet.PrintWalletHeader()
 	writer := utils.NewTableWriter()
 	writer.AppendHeader(table.Row{"Data", "Ativo", "Preço", "Quantidade", "Total"})
 	for _, transaction := range wallet.Transactions {

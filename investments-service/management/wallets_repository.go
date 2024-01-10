@@ -1,11 +1,21 @@
-package repositories
+package management
 
 import (
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"github.com/renanmedina/investment-warlock/investments-service/utils"
+	"github.com/surrealdb/surrealdb.go"
 )
 
-func Save(wallet investor.Wallet) investor.Wallet {
+type WalletRepository struct {
+	db *surrealdb.DB
+}
+
+func NewWalletRepository() *WalletRepository {
+	return &WalletRepository {
+		db:  utils.GetDatabase(),
+	}
+}
+
+func (r *WalletRepository) Save(wallet Wallet) Wallet {
 	db := utils.GetDatabase()
 
 	// try creating if fails probably exists then updated (should improve this in the future)
@@ -19,7 +29,7 @@ func Save(wallet investor.Wallet) investor.Wallet {
 	return wallet
 }
 
-func SaveTransactions(transactions []investor.Transaction) []investor.Transaction {
+func SaveTransactions(transactions []Transaction) []Transaction {
 	for _, transaction := range transactions {
 		SaveTransaction(transaction)
 	}
@@ -27,7 +37,7 @@ func SaveTransactions(transactions []investor.Transaction) []investor.Transactio
 	return transactions
 }
 
-// func GetByClientEmail(email string) investor.Wallet {
+// func GetByClientEmail(email string) Wallet {
 // 	db := utils.GetDatabase()
 
 // 	return wallet

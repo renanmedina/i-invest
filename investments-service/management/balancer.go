@@ -1,8 +1,4 @@
-package advisor
-
-import (
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
-)
+package management
 
 type BalanceSetup struct {
 	Kind       string
@@ -37,7 +33,7 @@ func NewBalanceSuggestion(kind string, currentPercent float64, currentTotal floa
 	return BalanceSuggestion{kind, currentPercent, currentTotal, targetPercentage, operation, suggestionAmount}
 }
 
-func BalanceWalletByAssetType(wallet investor.Wallet, setups []BalanceSetup) []BalanceSuggestion {
+func BalanceWalletByAssetType(wallet Wallet, setups []BalanceSetup) []BalanceSuggestion {
 	var suggestions []BalanceSuggestion
 	walletTotal := wallet.Total()
 

@@ -1,12 +1,11 @@
-package use_cases
+package management
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"github.com/renanmedina/investment-warlock/investments-service/utils"
 )
 
-func SimulateBuy(wallet investor.Wallet) {
+func SimulateBuy(wallet Wallet) {
 	utils.ClearConsole()
 	fmt.Println("===========================================================")
 	fmt.Println("                Simular aporte de compra                   ")

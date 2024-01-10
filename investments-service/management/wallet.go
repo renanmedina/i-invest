@@ -1,9 +1,10 @@
-package investor
+package management
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"github.com/renanmedina/investment-warlock/investments-service/utils"
 	"os"
 )
 
@@ -129,4 +130,13 @@ func (w *Wallet) ToMap() map[string]interface{} {
 		"quantity":       w.Quantity(),
 		"client":         w.Client.ToMap(),
 	}
+}
+
+func (wallet *Wallet) PrintWalletHeader() {
+	fmt.Println("===========================================================")
+	fmt.Println("Wallet: ", wallet.Name)
+	fmt.Println("Cliente: ", wallet.Client.Name)
+	fmt.Println("Patrimonio atual: ", utils.CurrencyFormat(wallet.Total()))
+	fmt.Println("Investimento realizado: ", utils.CurrencyFormat(wallet.TotalInvested()))
+	fmt.Println("% variação: ", utils.PercentageFormat(wallet.VariationPercentage()))
 }
