@@ -2,8 +2,8 @@ package use_cases
 
 import (
 	"fmt"
-	"investment-warlock/investor"
-	"investment-warlock/utils"
+	"github.com/renanmedina/investment-warlock/investments-service/investor"
+	"github.com/renanmedina/investment-warlock/investments-service/utils"
 )
 
 func SimulateBuy(wallet investor.Wallet) {

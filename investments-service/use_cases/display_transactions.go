@@ -1,8 +1,8 @@
 package use_cases
 
 import (
-	"investment-warlock/investor"
-	"investment-warlock/utils"
+	"github.com/renanmedina/investment-warlock/investments-service/investor"
+	"github.com/renanmedina/investment-warlock/investments-service/utils"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )

@@ -2,7 +2,7 @@ package investor
 
 import (
 	"fmt"
-	"investment-warlock/market/brapi"
+	"github.com/renanmedina/investment-warlock/investments-service/market/brapi"
 	"math"
 )
 

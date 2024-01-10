@@ -2,7 +2,7 @@ package importers
 
 import (
 	"encoding/csv"
-	"investment-warlock/investor"
+	"github.com/renanmedina/investment-warlock/investments-service/investor"
 	"os"
 	"strconv"
 	"strings"

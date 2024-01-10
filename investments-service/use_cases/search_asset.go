@@ -2,9 +2,9 @@ package use_cases
 
 import (
 	"fmt"
-	"investment-warlock/investor"
-	"investment-warlock/market/brapi"
-	"investment-warlock/utils"
+	"github.com/renanmedina/investment-warlock/investments-service/investor"
+	"github.com/renanmedina/investment-warlock/investments-service/market/brapi"
+	"github.com/renanmedina/investment-warlock/investments-service/utils"
 	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"

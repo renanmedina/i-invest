@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"investment-warlock/investor"
-	wallet_repository "investment-warlock/investor/repositories"
-	"investment-warlock/use_cases"
-	"investment-warlock/utils"
+	"github.com/renanmedina/investment-warlock/investments-service/importers"
+	"github.com/renanmedina/investment-warlock/investments-service/investor"
+	wallet_repository "github.com/renanmedina/investment-warlock/investments-service/investor/repositories"
+	"github.com/renanmedina/investment-warlock/investments-service/use_cases"
+	"github.com/renanmedina/investment-warlock/investments-service/utils"
 )
 
 func DisplayMenu(wallet investor.Wallet) {
@@ -53,4 +54,10 @@ func executeAction(option string, wallet investor.Wallet) {
 
 	fmt.Println("Pressione qualquer tecla para continuar ....")
 	utils.ReadLine()
+}
+
+func main() {
+	// wallet := investor.BuildWalletFromJsonFile("wallet.json")
+	wallet, _ := importers.ImportFromB3Csv("transactions.csv")
+	DisplayMenu(wallet)
 }

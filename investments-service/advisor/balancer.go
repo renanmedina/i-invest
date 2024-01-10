@@ -1,7 +1,7 @@
 package advisor
 
 import (
-	"investment-warlock/investor"
+	"github.com/renanmedina/investment-warlock/investments-service/investor"
 )
 
 type BalanceSetup struct {

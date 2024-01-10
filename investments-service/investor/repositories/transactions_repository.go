@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"investment-warlock/investor"
-	"investment-warlock/utils"
+	"github.com/renanmedina/investment-warlock/investments-service/investor"
+	"github.com/renanmedina/investment-warlock/investments-service/utils"
 )
 
 func SaveTransaction(transaction investor.Transaction) investor.Transaction {
