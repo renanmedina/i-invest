@@ -1,10 +1,10 @@
-package management
+package wallets
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/renanmedina/investment-warlock/backend/utils"
 	"io/ioutil"
-	"github.com/renanmedina/investment-warlock/investments-service/utils"
 	"os"
 )
 

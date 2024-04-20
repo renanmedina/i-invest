@@ -1,4 +1,4 @@
-package management
+package wallets
 
 type Client struct {
 	Id    string

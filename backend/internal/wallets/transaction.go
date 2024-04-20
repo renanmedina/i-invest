@@ -1,4 +1,4 @@
-package management
+package wallets
 
 type Transaction struct {
 	Id              string

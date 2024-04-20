@@ -1,4 +1,4 @@
-package management
+package wallets
 
 type BalanceSetup struct {
 	Kind       string

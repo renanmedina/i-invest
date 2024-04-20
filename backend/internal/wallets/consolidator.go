@@ -1,8 +1,8 @@
-package management
+package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/market/brapi"
+	"github.com/renanmedina/investment-warlock/backend/market/brapi"
 	"math"
 )
 

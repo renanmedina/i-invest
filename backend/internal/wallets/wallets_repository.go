@@ -1,7 +1,7 @@
-package management
+package wallets
 
 import (
-	"github.com/renanmedina/investment-warlock/investments-service/utils"
+	"github.com/renanmedina/investment-warlock/backend/utils"
 	"github.com/surrealdb/surrealdb.go"
 )
 
@@ -10,8 +10,8 @@ type WalletRepository struct {
 }
 
 func NewWalletRepository() *WalletRepository {
-	return &WalletRepository {
-		db:  utils.GetDatabase(),
+	return &WalletRepository{
+		db: utils.GetDatabase(),
 	}
 }
 

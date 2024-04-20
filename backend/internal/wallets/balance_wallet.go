@@ -1,9 +1,9 @@
-package management
+package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/utils"
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/renanmedina/investment-warlock/backend/utils"
 )
 
 func BalanceWallet(wallet Wallet) {

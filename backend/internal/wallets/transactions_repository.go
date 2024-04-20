@@ -1,7 +1,7 @@
-package management
+package wallets
 
 import (
-	"github.com/renanmedina/investment-warlock/investments-service/utils"
+	"github.com/renanmedina/investment-warlock/backend/utils"
 )
 
 func SaveTransaction(transaction Transaction) Transaction {

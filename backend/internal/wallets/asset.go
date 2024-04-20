@@ -1,4 +1,4 @@
-package management
+package wallets
 
 type Asset struct {
 	Ticker string

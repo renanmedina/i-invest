@@ -1,8 +1,8 @@
-package management
+package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/utils"
+	"github.com/renanmedina/investment-warlock/backend/utils"
 )
 
 func SimulateBuy(wallet Wallet) {

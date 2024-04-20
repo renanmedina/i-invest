@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/management"
-	"github.com/renanmedina/investment-warlock/investments-service/utils"
+	"github.com/renanmedina/investment-warlock/backend/utils"
+	"github.com/renanmedina/investment-warlock/backend/wallets"
 )
 
 func DisplayMenu(wallet management.Wallet) {

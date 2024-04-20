@@ -1,9 +1,9 @@
-package management
+package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/investments-service/market/brapi"
-	"github.com/renanmedina/investment-warlock/investments-service/utils"
+	"github.com/renanmedina/investment-warlock/backend/market/brapi"
+	"github.com/renanmedina/investment-warlock/backend/utils"
 	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"

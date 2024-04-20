@@ -1,4 +1,4 @@
-module github.com/renanmedina/investment-warlock/investments-service
+module github.com/renanmedina/investment-warlock/backend
 
 go 1.21.1
 

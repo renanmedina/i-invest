@@ -1,4 +1,4 @@
-package management
+package wallets
 
 import (
 	"encoding/csv"
