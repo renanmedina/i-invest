@@ -1,7 +1,7 @@
 package wallets
 
 import (
-	"github.com/renanmedina/investment-warlock/backend/utils"
+	"github.com/renanmedina/investment-warlock/utils"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )

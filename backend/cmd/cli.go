@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/backend/utils"
-	"github.com/renanmedina/investment-warlock/backend/wallets"
+	"github.com/renanmedina/investment-warlock/internal/wallets"
+	"github.com/renanmedina/investment-warlock/utils"
 )
 
-func DisplayMenu(wallet management.Wallet) {
+func DisplayMenu(wallet wallets.Wallet) {
 	exit_action := "9"
 	for {
 		// utils.ClearConsole()
@@ -33,20 +33,20 @@ func DisplayMenu(wallet management.Wallet) {
 	}
 }
 
-func executeAction(option string, wallet management.Wallet) {
+func executeAction(option string, wallet wallets.Wallet) {
 	utils.ClearConsole()
 	switch option {
 	case "1":
-		management.DisplayTransactions(wallet)
+		wallets.DisplayTransactions(wallet)
 	case "2":
-		management.DisplayConsolidation(wallet)
+		wallets.DisplayConsolidation(wallet)
 	case "3":
-		management.BalanceWallet(wallet)
+		wallets.BalanceWallet(wallet)
 	case "4":
 	case "5":
-		management.SearchAsset(wallet)
+		wallets.SearchAsset(wallet)
 	case "8":
-		management.NewWalletRepository().Save(wallet)
+		wallets.NewWalletRepository().Save(wallet)
 	}
 
 	fmt.Println("Pressione qualquer tecla para continuar ....")
@@ -54,7 +54,7 @@ func executeAction(option string, wallet management.Wallet) {
 }
 
 func main() {
-	// wallet := management.BuildWalletFromJsonFile("wallet.json")
-	wallet, _ := management.ImportFromB3Csv("transactions.csv")
+	// wallet := wallets.BuildWalletFromJsonFile("wallet.json")
+	wallet, _ := wallets.ImportFromB3Csv("transactions.csv")
 	DisplayMenu(wallet)
 }

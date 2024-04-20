@@ -2,7 +2,7 @@ package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/backend/utils"
+	"github.com/renanmedina/investment-warlock/utils"
 )
 
 func SimulateBuy(wallet Wallet) {

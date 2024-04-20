@@ -1,7 +1,7 @@
 package wallets
 
 import (
-	"github.com/renanmedina/investment-warlock/backend/utils"
+	"github.com/renanmedina/investment-warlock/utils"
 	"github.com/surrealdb/surrealdb.go"
 )
 

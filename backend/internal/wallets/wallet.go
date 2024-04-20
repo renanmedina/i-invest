@@ -3,7 +3,7 @@ package wallets
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/renanmedina/investment-warlock/backend/utils"
+	"github.com/renanmedina/investment-warlock/utils"
 	"io/ioutil"
 	"os"
 )

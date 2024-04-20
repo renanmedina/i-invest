@@ -2,7 +2,7 @@ package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/backend/market/brapi"
+	"github.com/renanmedina/investment-warlock/market/brapi"
 	"math"
 )
 
