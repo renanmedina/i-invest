@@ -9,6 +9,7 @@ import (
 
 type Configs struct {
 	DB_URI        string
+	DB_TOKEN      string
 	DB_USERNAME   string
 	DB_PASSWORD   string
 	DB_NAMESPACE  string
@@ -23,6 +24,7 @@ func GetConfigs() Configs {
 
 	return Configs{
 		DB_URI:        os.Getenv("DB_URI"),
+		DB_TOKEN:      os.Getenv("DB_TOKEN"),
 		DB_USERNAME:   os.Getenv("DB_USERNAME"),
 		DB_PASSWORD:   os.Getenv("DB_PASSWORD"),
 		DB_NAMESPACE:  os.Getenv("DB_NAMESPACE"),

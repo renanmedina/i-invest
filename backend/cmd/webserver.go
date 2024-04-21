@@ -1,18 +1,43 @@
-// package main
+package main
 
-// import (
-// 	"github.com/gin-gonic/gin"
-// 	"net/http"
-// )
+import (
+	"fmt"
+	"net/http"
 
-// func main() {
-// 	webserver := gin.Default()
+	"github.com/gin-gonic/gin"
+	"github.com/renanmedina/investment-warlock/handlers"
+)
 
-// 	webserver.GET("/ping", func(c *gin.Context) {
-// 		c.JSON(http.StatusOK, gin.H{
-// 			"message": "pong",
-// 		})
-// 	})
+func main() {
+	router := gin.Default()
+	initializeHandlers(router)
+	startWebserver(router)
+}
 
-// 	webserver.Run() // listen and serve on 0.0.0.0:8080
-// }
+func initializeHandlers(router *gin.Engine) {
+	router.GET("/healthcheck", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"health": "up",
+		})
+	})
+
+	authGroup := router.Group("/auth")
+	authGroup.POST("/login", handlers.AuthenticateUser)
+	authGroup.POST("/register", handlers.RegisterUser)
+
+	apiGroup := router.Group("/api")
+	apiGroup.GET("/wallets/:id", handlers.ShowWallet)
+	apiGroup.POST("/wallets", handlers.CreateWallet)
+	apiGroup.POST("/wallets/:id/create-transaction", handlers.CreateWalletTransaction)
+	apiGroup.POST("/wallets/:id/import-b3", handlers.ImportWalletFromB3)
+	apiGroup.POST("/wallets/:id/import-b3-transactions", handlers.ImportWalletTransactionsFromB3)
+}
+
+func startWebserver(router *gin.Engine) {
+	err := router.Run() // listen and serve on 0.0.0.0:8080
+	if err != nil {
+		panic("failed to start server at 0.0.0.0:8080")
+	}
+
+	fmt.Println("[WEBSERVER] Successfully listening at 0.0.0.0:8080")
+}

@@ -1,12 +1,13 @@
 package wallets
 
 import (
+	"database/sql"
+
 	"github.com/renanmedina/investment-warlock/utils"
-	"github.com/surrealdb/surrealdb.go"
 )
 
 type WalletRepository struct {
-	db *surrealdb.DB
+	db *sql.DB
 }
 
 func NewWalletRepository() *WalletRepository {
@@ -16,14 +17,14 @@ func NewWalletRepository() *WalletRepository {
 }
 
 func (r *WalletRepository) Save(wallet Wallet) Wallet {
-	db := utils.GetDatabase()
+	// db := utils.GetDatabase()
 
 	// try creating if fails probably exists then updated (should improve this in the future)
-	if _, errCreate := db.Create("wallets", wallet.ToMap()); errCreate != nil {
-		if _, errUpdate := db.Change(wallet.Id, wallet.ToMap()); errUpdate != nil {
-			panic(errUpdate)
-		}
-	}
+	// if _, errCreate := db.Create("wallets", wallet.ToMap()); errCreate != nil {
+	// 	if _, errUpdate := db.Change(wallet.Id, wallet.ToMap()); errUpdate != nil {
+	// 		panic(errUpdate)
+	// 	}
+	// }
 
 	SaveTransactions(wallet.Transactions)
 	return wallet

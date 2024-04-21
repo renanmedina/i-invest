@@ -2,8 +2,9 @@ package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/market/brapi"
 	"math"
+
+	"github.com/renanmedina/investment-warlock/internal/market/brapi"
 )
 
 type ConsolidatorItem struct {

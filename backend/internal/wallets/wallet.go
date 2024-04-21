@@ -3,9 +3,10 @@ package wallets
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/renanmedina/investment-warlock/utils"
 	"io/ioutil"
 	"os"
+
+	"github.com/renanmedina/investment-warlock/utils"
 )
 
 type Wallet struct {

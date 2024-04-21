@@ -2,9 +2,10 @@ package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/market/brapi"
-	"github.com/renanmedina/investment-warlock/utils"
 	"strings"
+
+	"github.com/renanmedina/investment-warlock/internal/market/brapi"
+	"github.com/renanmedina/investment-warlock/utils"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )

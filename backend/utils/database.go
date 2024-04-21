@@ -1,25 +1,18 @@
 package utils
 
 import (
-	"github.com/surrealdb/surrealdb.go"
+	"database/sql"
+	"fmt"
+
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 )
 
-func GetDatabase() *surrealdb.DB {
+func GetDatabase() *sql.DB {
 	configs := GetConfigs()
-	connection, err := surrealdb.New(configs.DB_URI)
+	connectionString := fmt.Sprintf("%s:authToken=%s", configs.DB_URI, configs.DB_TOKEN)
+	connection, err := sql.Open("libsql", connectionString)
 
 	if err != nil {
-		panic(err)
-	}
-
-	if _, err = connection.Signin(map[string]interface{}{
-		"user": configs.DB_USERNAME,
-		"pass": configs.DB_PASSWORD,
-	}); err != nil {
-		panic(err)
-	}
-
-	if _, err = connection.Use(configs.DB_NAMESPACE, configs.DATABASE_NAME); err != nil {
 		panic(err)
 	}
 

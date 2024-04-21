@@ -1,10 +1,12 @@
-package wallets
+package b3
 
 import (
 	"encoding/csv"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/renanmedina/investment-warlock/internal/wallets"
 )
 
 type CsvTransationItem struct {
@@ -15,12 +17,12 @@ type CsvTransationItem struct {
 	Price     float64
 }
 
-func ImportFromB3Csv(filepath string) (Wallet, error) {
+func ParseB3CsvFile(filepath string) (wallets.Wallet, error) {
 	csvFile, err := os.Open(filepath)
-	transactions := []Transaction{}
+	transactions := []wallets.Transaction{}
 
 	if err != nil {
-		return Wallet{}, err
+		return wallets.Wallet{}, err
 	}
 
 	defer csvFile.Close()
@@ -29,7 +31,7 @@ func ImportFromB3Csv(filepath string) (Wallet, error) {
 	transactionsData, err := csvReader.ReadAll()
 
 	if err != nil {
-		return Wallet{}, err
+		return wallets.Wallet{}, err
 	}
 
 	for rowIndex, line := range transactionsData {
@@ -37,7 +39,7 @@ func ImportFromB3Csv(filepath string) (Wallet, error) {
 		if rowIndex > 0 {
 			record := parseTransactionLine(line)
 
-			transaction := NewTransaction(
+			transaction := wallets.NewTransaction(
 				record.AssetType,
 				record.Ticker,
 				record.Price,
@@ -50,7 +52,7 @@ func ImportFromB3Csv(filepath string) (Wallet, error) {
 		}
 	}
 
-	wallet := NewWallet("1", "Wallet de testes", "Renan Medina", transactions).Consolidate()
+	wallet := wallets.NewWallet("1", "Wallet de testes", "Renan Medina", transactions).Consolidate()
 	return wallet, nil
 }
 

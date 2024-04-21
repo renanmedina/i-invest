@@ -1,0 +1,37 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "▶︎ Backend: Run Webserver",
+      "type": "shell",
+      "command": "gvm use go1.22.2 && cd backend && gow run cmd/webserver.go",
+      "windows": {
+        "command": "gvm use go1.22.2 && cd backend && gow run cmd/webserver.go"
+      },
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "close": true,
+        "group": "investment-warlock-runtime"
+      }
+    },
+    {
+      "label": "▶︎ Backend: Test B3 Wallet import",
+      "type": "shell",
+      "command": "cd backend && ./test_import_b3.sh",
+      "windows": {
+        "command": "cd backend && ./test_import_b3.sh"
+      },
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "close": true,
+        "group": "investment-warlock-runtime"
+      }
+    },
+  ]
+}
