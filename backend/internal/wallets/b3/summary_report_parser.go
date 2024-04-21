@@ -27,7 +27,7 @@ type B3SummaryReportItem struct {
 	TotalAmount      float64
 }
 
-func ParseB3SummaryReport(filepath string) ([]B3SummaryReportItem, error) {
+func ParseSummaryReport(filepath string) ([]B3SummaryReportItem, error) {
 	xl, err := xlsxreader.OpenFile(filepath)
 	defer xl.Close()
 

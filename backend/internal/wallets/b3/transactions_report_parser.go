@@ -1,81 +1,84 @@
 package b3
 
 import (
-	"encoding/csv"
-	"os"
 	"strconv"
 	"strings"
 
-	"github.com/renanmedina/investment-warlock/internal/wallets"
+	"github.com/thedatashed/xlsxreader"
 )
 
-type CsvTransationItem struct {
+const (
+	DEBIT_TRANSACTION_TYPE  = "Debito"
+	CREDIT_TRANSACTION_TYPE = "Credito"
+)
+
+type B3TransationReportItem struct {
 	Date      string
+	Details   string
 	AssetType string
 	Ticker    string
-	Quantity  int
+	Quantity  float64
 	Price     float64
+	Total     float64
 }
 
-func ParseB3CsvFile(filepath string) (wallets.Wallet, error) {
-	csvFile, err := os.Open(filepath)
-	transactions := []wallets.Transaction{}
+func ParseTransactionsReport(filepath string) ([]B3TransationReportItem, error) {
+	xl, err := xlsxreader.OpenFile(filepath)
+	transactions := make([]B3TransationReportItem, 0)
 
 	if err != nil {
-		return wallets.Wallet{}, err
+		return transactions, err
 	}
 
-	defer csvFile.Close()
-
-	csvReader := csv.NewReader(csvFile)
-	transactionsData, err := csvReader.ReadAll()
+	defer xl.Close()
 
 	if err != nil {
-		return wallets.Wallet{}, err
+		return transactions, err
 	}
 
-	for rowIndex, line := range transactionsData {
-		// ignore header
-		if rowIndex > 0 {
-			record := parseTransactionLine(line)
-
-			transaction := wallets.NewTransaction(
-				record.AssetType,
-				record.Ticker,
-				record.Price,
-				record.Quantity,
-				0.0,
-				record.Date,
-			)
-
-			transactions = append(transactions, transaction)
+	headerSkipped := false
+	for row := range xl.ReadRows(xl.Sheets[0]) {
+		if !headerSkipped {
+			headerSkipped = true
+			continue
 		}
+
+		price, _ := strconv.ParseFloat(row.Cells[6].Value, 64)
+		total, _ := strconv.ParseFloat(row.Cells[7].Value, 64)
+		quantity, _ := strconv.ParseFloat(row.Cells[5].Value, 64)
+
+		if row.Cells[0].Value == DEBIT_TRANSACTION_TYPE {
+			quantity *= -1
+			total *= -1
+		}
+
+		tickerId := row.Cells[3].Value
+		tickerSplit := strings.Split(tickerId, "-")
+		if len(tickerSplit) > 1 {
+			tickerId = strings.TrimSpace(tickerSplit[0])
+		}
+
+		assetType := "stock"
+
+		if tickerId[len(tickerId)-2:] == "11" {
+			assetType = "real_state"
+		}
+
+		if len(tickerId) > 6 && tickerId[0:6] == "Tesouro" {
+			assetType = "treasure"
+		}
+
+		transactionItem := B3TransationReportItem{
+			Date:      strings.TrimSpace(row.Cells[1].Value),
+			Details:   strings.TrimSpace(row.Cells[2].Value),
+			AssetType: assetType,
+			Ticker:    tickerId,
+			Quantity:  quantity,
+			Price:     price,
+			Total:     total,
+		}
+		transactions = append(transactions, transactionItem)
 	}
 
-	wallet := wallets.NewWallet("1", "Wallet de testes", "Renan Medina", transactions).Consolidate()
-	return wallet, nil
-}
-
-func parseTransactionLine(csvLine []string) CsvTransationItem {
-	assetType := "stock"
-	tickerId := csvLine[5][len(csvLine[5])-2:]
-	if csvLine[2] == "Mercado à Vista" && tickerId == "11" {
-		assetType = "real_state"
-	}
-
-	quantity, _ := strconv.Atoi(csvLine[6])
-	replacedPrice := strings.ReplaceAll(strings.ReplaceAll(csvLine[7], "R$", ""), " ", "")
-	price, _ := strconv.ParseFloat(replacedPrice, 64)
-
-	if csvLine[1] == "Venda" {
-		quantity *= -1
-	}
-
-	return CsvTransationItem{
-		csvLine[0],
-		assetType,
-		csvLine[5],
-		quantity,
-		price,
-	}
+	return transactions, nil
 }

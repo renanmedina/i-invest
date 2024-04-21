@@ -16,12 +16,8 @@ func CreateWallet(c *gin.Context)            {}
 func ShowWallet(c *gin.Context)              {}
 func CreateWalletTransaction(c *gin.Context) {}
 
-func ImportWalletFromB3(c *gin.Context) {
-	// walletId, _ := c.Params.Get("id")
-
-	// c.JSON(http.StatusOK, gin.H{
-	// 	"wallet_id": walletId,
-	// })
+func ImportB3FileFormHandler(c *gin.Context) (string, string) {
+	walletId, _ := c.Params.Get("id")
 
 	var importFrom B3ImportForm
 	err := c.ShouldBind(&importFrom)
@@ -30,16 +26,41 @@ func ImportWalletFromB3(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		return
+
+		return "", ""
 	}
 
-	report, err := b3.ParseB3SummaryReport(importFrom.ReportFile.Filename)
-	// wallet.Id = walletId
-	// wallets.SaveWallet(wallet)
+	return walletId, importFrom.ReportFile.Filename
+}
+
+func ImportWalletFromB3(c *gin.Context) {
+	_, reportFilePath := ImportB3FileFormHandler(c)
+	report, err := b3.ParseSummaryReport(reportFilePath)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"items": report,
 	})
 }
 
-func ImportWalletTransactionsFromB3(c *gin.Context) {}
+func ImportWalletTransactionsFromB3(c *gin.Context) {
+	_, reportFilePath := ImportB3FileFormHandler(c)
+	report, err := b3.ParseTransactionsReport(reportFilePath)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"items": report,
+	})
+}
