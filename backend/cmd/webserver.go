@@ -31,6 +31,9 @@ func initializeHandlers(router *gin.Engine) {
 	apiGroup.POST("/wallets/:id/create-transaction", handlers.CreateWalletTransaction)
 	apiGroup.POST("/wallets/:id/import-b3", handlers.ImportWalletFromB3)
 	apiGroup.POST("/wallets/:id/import-b3-transactions", handlers.ImportWalletTransactionsFromB3)
+
+	marketGroup := router.Group("/market")
+	marketGroup.GET("/:tickerId/announcements", handlers.MarketTickerAnnouncements)
 }
 
 func startWebserver(router *gin.Engine) {

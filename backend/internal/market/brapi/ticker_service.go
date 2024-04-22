@@ -3,13 +3,19 @@ package brapi
 import (
 	"fmt"
 	"strings"
+
+	"github.com/renanmedina/investment-warlock/internal/market"
 )
 
 type TickerService struct {
-	client ApiClient[Ticker]
+	client market.ApiClient[TickerApiResult]
 }
 
 type PriceHistory struct {
+}
+
+type TickerApiResult struct {
+	Results []Ticker `json:"results"`
 }
 
 type Ticker struct {
@@ -23,7 +29,10 @@ type Ticker struct {
 }
 
 func NewTickerService() TickerService {
-	return TickerService{client: NewApiClient[Ticker]()}
+	client := market.NewApiClient[TickerApiResult](market.ApiConfig{
+		ApiUrl: "https://brapi.dev/api",
+	})
+	return TickerService{client}
 }
 
 func (ts *TickerService) GetByCode(tickerCode string) (Ticker, error) {
@@ -40,7 +49,12 @@ func (ts *TickerService) GetByCode(tickerCode string) (Ticker, error) {
 func (ts *TickerService) GetByCodes(tickerCodes []string) ([]Ticker, error) {
 	var tickers []Ticker
 	codes := strings.Join(tickerCodes, ",")
-	response := ts.client.Get(fmt.Sprintf("/quote/%s?fundamental=true&dividends=true", codes))
+	response, err := ts.client.Get(fmt.Sprintf("/quote/%s?fundamental=true&dividends=true", codes), make(map[string]string))
+
+	if err != nil {
+		return make([]Ticker, 0), err
+	}
+
 	tickers = response.Results
 
 	if len(tickers) == 0 {
