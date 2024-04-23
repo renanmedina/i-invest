@@ -16,6 +16,10 @@ func NewWalletRepository() *WalletRepository {
 	}
 }
 
+func (r *WalletRepository) GetById(walletId string) (*Wallet, error) {
+	return &Wallet{}, nil
+}
+
 func (r *WalletRepository) Save(wallet Wallet) Wallet {
 	// db := utils.GetDatabase()
 

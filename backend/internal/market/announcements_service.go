@@ -1,9 +1,7 @@
-package status_invest
+package market
 
 import (
 	"strconv"
-
-	"github.com/renanmedina/investment-warlock/internal/market"
 )
 
 const (
@@ -11,11 +9,11 @@ const (
 )
 
 type AnnouncementService struct {
-	apiClient market.ApiClient[AnnouncementApiResults]
+	apiClient ApiClient[AnnouncementApiResults]
 }
 
 type AnnouncementApiResults struct {
-	Results []AnnouncementApiItem `json:"data"`
+	Items []AnnouncementApiItem `json:"data"`
 }
 
 type AnnouncementApiItem struct {
@@ -28,7 +26,7 @@ type AnnouncementApiItem struct {
 }
 
 func NewAnnouncementsService() *AnnouncementService {
-	client := market.NewApiClient[AnnouncementApiResults](market.ApiConfig{
+	client := NewApiClient[AnnouncementApiResults](ApiConfig{
 		ApiUrl: "https://statusinvest.com.br",
 	})
 

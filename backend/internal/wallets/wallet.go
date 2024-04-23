@@ -51,7 +51,6 @@ func (w Wallet) VariationPercentage() float64 {
 
 	if totalAmount != 0 {
 		differenceAmount := totalAmount - totalInvested
-		fmt.Println(differenceAmount)
 		percentage = (differenceAmount * 100) / totalInvested
 	}
 
@@ -81,6 +80,19 @@ func (w Wallet) GetConsolidation(assetTicker string) (ConsolidatorItem, bool) {
 func (w Wallet) Consolidate() Wallet {
 	w.Consolidation = ConsolidateByAsset(w)
 	return w
+}
+
+func (w Wallet) GetTickerCodes() []string {
+	if len(w.Consolidation) == 0 {
+		w.Consolidate()
+	}
+
+	tickers := make([]string, 0)
+	for tickerCode, _ := range w.Consolidation {
+		tickers = append(tickers, tickerCode)
+	}
+
+	return tickers
 }
 
 func (w Wallet) TotalForAssetKind(targetKind string) float64 {

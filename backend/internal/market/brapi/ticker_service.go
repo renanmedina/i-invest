@@ -49,7 +49,11 @@ func (ts *TickerService) GetByCode(tickerCode string) (Ticker, error) {
 func (ts *TickerService) GetByCodes(tickerCodes []string) ([]Ticker, error) {
 	var tickers []Ticker
 	codes := strings.Join(tickerCodes, ",")
-	response, err := ts.client.Get(fmt.Sprintf("/quote/%s?fundamental=true&dividends=true", codes), make(map[string]string))
+	response, err := ts.client.Get(
+		fmt.Sprintf("/quote/%s?fundamental=true&dividends=true", codes),
+		make(map[string]string),
+		make(map[string]string),
+	)
 
 	if err != nil {
 		return make([]Ticker, 0), err
