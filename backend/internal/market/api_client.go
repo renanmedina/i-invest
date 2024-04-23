@@ -1,6 +1,7 @@
 package market
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -9,8 +10,9 @@ import (
 )
 
 type ApiClient[T any] struct {
-	baseUrl   string
-	authToken string
+	httpClient http.Client
+	baseUrl    string
+	authToken  string
 }
 
 type ApiConfig struct {
@@ -20,8 +22,9 @@ type ApiConfig struct {
 
 func NewApiClient[T any](config ApiConfig) ApiClient[T] {
 	return ApiClient[T]{
-		baseUrl:   config.ApiUrl,
-		authToken: config.AuthToken,
+		httpClient: http.Client{},
+		baseUrl:    config.ApiUrl,
+		authToken:  config.AuthToken,
 	}
 }
 
@@ -38,10 +41,7 @@ func (c *ApiClient[T]) BuildUrl(path string, params map[string]string) string {
 
 func parseResult[T any](data []byte) (*T, error) {
 	var resultData T
-	fmt.Println(string(data))
 	err := json.Unmarshal(data, &resultData)
-
-	fmt.Println(err.Error())
 
 	if err != nil {
 		return nil, err
@@ -51,10 +51,24 @@ func parseResult[T any](data []byte) (*T, error) {
 }
 
 func (client *ApiClient[T]) Get(path string, params map[string]string) (*T, error) {
-	url := client.BuildUrl(path, params)
-	fmt.Println(url)
-	response, err := http.Get(url)
+	request, err := client.buildRequest("GET", path, params)
+	if err != nil {
+		return nil, err
+	}
+	response, err := client.httpClient.Do(request)
+	return client.parseResponse(response, err)
+}
 
+func (client *ApiClient[T]) Post(path string, params map[string]string) (*T, error) {
+	request, err := client.buildRequest("POST", path, params)
+	if err != nil {
+		return nil, err
+	}
+	response, err := client.httpClient.Do(request)
+	return client.parseResponse(response, err)
+}
+
+func (client *ApiClient[T]) parseResponse(response *http.Response, err error) (*T, error) {
 	if err != nil {
 		return nil, err
 	}
@@ -71,4 +85,29 @@ func (client *ApiClient[T]) Get(path string, params map[string]string) (*T, erro
 	}
 
 	return parsed, nil
+}
+
+func (client *ApiClient[T]) buildRequest(requestMethod string, path string, params map[string]string) (*http.Request, error) {
+	url := client.BuildUrl(path, params)
+	paramsBuffer := bytes.NewBuffer(make([]byte, 0))
+
+	if len(params) > 0 {
+		bodyParams, err := json.Marshal(params)
+		if err != nil {
+			return nil, err
+		}
+
+		paramsBuffer = bytes.NewBuffer(bodyParams)
+	}
+
+	request, err := http.NewRequest(requestMethod, url, paramsBuffer)
+	if err != nil {
+		return nil, err
+	}
+
+	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("User-Agent", "PostmanRuntime/7.37.3")
+	request.Header.Add("Accept", "*/*")
+
+	return request, nil
 }
