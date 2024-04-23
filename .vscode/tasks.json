@@ -4,11 +4,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "▶︎ Backend: Run Webserver",
+      "label": "▶︎ Backend: Run Dev-Webserver",
       "type": "shell",
-      "command": "gvm use go1.22.2 && cd backend && gow run cmd/webserver.go",
+      "command": "cd backend && ./start_devserver.sh",
       "windows": {
-        "command": "gvm use go1.22.2 && cd backend && gow run cmd/webserver.go"
+        "command": "cd backend && ./start_devserver.sh"
       },
       "group": "none",
       "presentation": {
