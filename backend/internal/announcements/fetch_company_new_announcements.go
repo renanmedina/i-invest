@@ -8,14 +8,14 @@ import (
 type FetchCompanyNewAnnouncement struct {
 	allAnnouncements     *AnnouncementsRepository
 	announcementsService *market.AnnouncementService
-	publisher            *event_store.EventPublisher
+	eventPublisher       *event_store.EventPublisher
 }
 
 func NewFetchCompanyNewAnnouncements() *FetchCompanyNewAnnouncement {
 	return &FetchCompanyNewAnnouncement{
 		allAnnouncements:     NewAnnouncementsRepository(),
 		announcementsService: market.NewAnnouncementsService(),
-		publisher:            event_store.NewEventPublisherWith(configureEventHandlers()),
+		eventPublisher:       event_store.NewEventPublisherWith(configureEventHandlers()),
 	}
 }
 
@@ -39,9 +39,9 @@ func (uc *FetchCompanyNewAnnouncement) Execute(tickerCode string, year int) []Co
 	)
 
 	for _, newAnnouncement := range newAnnouncements {
-		uc.allAnnouncements.Save(newAnnouncement)
+		uc.allAnnouncements.Save(&newAnnouncement)
 		event := NewCompanyAnnouncementCreatedEvent(&newAnnouncement)
-		uc.publisher.Publish(event)
+		uc.eventPublisher.Publish(event)
 	}
 
 	return newAnnouncements
@@ -64,5 +64,3 @@ func diffCompanyAnnouncements(pivotList *[]CompanyAnnouncement, savedList *[]Com
 
 	return missingAnnouncements
 }
-
-func (uc *FetchCompanyNewAnnouncement) publishEvent() {}

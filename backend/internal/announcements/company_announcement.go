@@ -19,6 +19,7 @@ type CompanyAnnouncement struct {
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
 	DeletedAt        time.Time `json:"deleted_at"`
+	Persisted        bool
 }
 
 func (a CompanyAnnouncement) MakeTempFileName() string {
@@ -52,5 +53,6 @@ func transalteAnnoutranslateAnnouncementFromApiItem(tickerCode string, item mark
 		AnnouncementDate: date,
 		CreatedAt:        time.Now(),
 		UpdatedAt:        time.Now(),
+		Persisted:        false,
 	}
 }

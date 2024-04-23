@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/renanmedina/investment-warlock/utils"
@@ -49,6 +50,7 @@ func (r *AnnouncementsRepository) GetById(id string) (*CompanyAnnouncement, erro
 		return nil, errors.New(fmt.Sprintf("Can't find CompanyAnnouncement with ID: %s", id))
 	}
 
+	announcement.Persisted = true
 	return &announcement, nil
 }
 
@@ -82,27 +84,41 @@ func (r *AnnouncementsRepository) GetByTickerCodeAndYear(tickerCode string, year
 			&announcement.UpdatedAt,
 			&announcement.DeletedAt,
 		)
+
+		announcement.Persisted = true
 		list = append(list, announcement)
 	}
 
 	return list
 }
 
-func (r *AnnouncementsRepository) Save(announcement CompanyAnnouncement) error {
-	query := squirrel.Insert(TABLE_NAME).
-		Columns("id", "ticker_code", "title", "announcement_type",
-			"announcement_date", "file_url", "original_file_url",
-		).Values(
-		announcement.Id, announcement.TickerCode, announcement.Subject,
-		announcement.AnnouncementType, announcement.AnnouncementDate, announcement.FileUrl,
-		announcement.OriginalFileUrl,
-	).RunWith(r.db).PlaceholderFormat(squirrel.Dollar)
+func (r *AnnouncementsRepository) Save(announcement *CompanyAnnouncement) (*CompanyAnnouncement, error) {
+	var err error
 
-	_, err := query.Exec()
-
-	if err != nil {
-		return err
+	if announcement.Persisted {
+		_, err = squirrel.Update(TABLE_NAME).
+			Set("file_url", announcement.FileUrl).
+			Set("updated_at", time.Now()).
+			RunWith(r.db).
+			PlaceholderFormat(squirrel.Dollar).
+			Exec()
+	} else {
+		_, err = squirrel.Insert(TABLE_NAME).
+			Columns("id", "ticker_code", "title", "announcement_type",
+				"announcement_date", "file_url", "original_file_url",
+			).Values(
+			announcement.Id, announcement.TickerCode, announcement.Subject,
+			announcement.AnnouncementType, announcement.AnnouncementDate, announcement.FileUrl,
+			announcement.OriginalFileUrl,
+		).
+			RunWith(r.db).
+			PlaceholderFormat(squirrel.Dollar).
+			Exec()
 	}
 
-	return nil
+	if err != nil {
+		return nil, err
+	}
+
+	return announcement, nil
 }

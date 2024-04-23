@@ -53,10 +53,14 @@ func (uc *DownloadAndSaveAnnouncementFile) Execute(announcementId string) {
 	}
 
 	tmpFilePath := downloadFileToTmpDir(*announcement)
-	storageFileUrl, _ := uc.fileStorage.Upload(tmpFilePath, announcement.MakeUploadPath())
+	storageFileUrl, err := uc.fileStorage.Upload(tmpFilePath, announcement.MakeUploadPath())
+
+	if err != nil {
+		panic(err)
+	}
 
 	announcement.FileUrl = storageFileUrl
-	uc.allAnnouncements.Save(*announcement)
+	uc.allAnnouncements.Save(announcement)
 	event := NewCompanyAnnouncementFileDownloadedAndSaved(announcement)
 	uc.eventPublisher.Publish(event)
 }
