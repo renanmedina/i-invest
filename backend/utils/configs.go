@@ -8,14 +8,18 @@ import (
 )
 
 type Configs struct {
-	DB_URI       string
-	DB_HOST      string
-	DB_PORT      string
-	DB_TOKEN     string
-	DB_USERNAME  string
-	DB_PASSWORD  string
-	DB_NAMESPACE string
-	DB_NAME      string
+	DB_URI                              string
+	DB_HOST                             string
+	DB_PORT                             string
+	DB_TOKEN                            string
+	DB_USERNAME                         string
+	DB_PASSWORD                         string
+	DB_NAMESPACE                        string
+	DB_NAME                             string
+	AWS_REGION                          string
+	AWS_ACCESS_KEY                      string
+	AWS_SECRET_KEY                      string
+	AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME string
 }
 
 func (c *Configs) DbConnectionInfo() string {
@@ -32,13 +36,17 @@ func GetConfigs() Configs {
 	}
 
 	return Configs{
-		DB_URI:       os.Getenv("DB_URL"),
-		DB_HOST:      os.Getenv("DB_HOST"),
-		DB_PORT:      os.Getenv("DB_PORT"),
-		DB_TOKEN:     os.Getenv("DB_TOKEN"),
-		DB_USERNAME:  os.Getenv("DB_USERNAME"),
-		DB_PASSWORD:  os.Getenv("DB_PASSWORD"),
-		DB_NAMESPACE: os.Getenv("DB_NAMESPACE"),
-		DB_NAME:      os.Getenv("DB_NAME"),
+		DB_URI:                              os.Getenv("DB_URL"),
+		DB_HOST:                             os.Getenv("DB_HOST"),
+		DB_PORT:                             os.Getenv("DB_PORT"),
+		DB_TOKEN:                            os.Getenv("DB_TOKEN"),
+		DB_USERNAME:                         os.Getenv("DB_USERNAME"),
+		DB_PASSWORD:                         os.Getenv("DB_PASSWORD"),
+		DB_NAMESPACE:                        os.Getenv("DB_NAMESPACE"),
+		DB_NAME:                             os.Getenv("DB_NAME"),
+		AWS_REGION:                          os.Getenv("AWS_REGION"),
+		AWS_ACCESS_KEY:                      os.Getenv("AWS_ACCESS_KEY"),
+		AWS_SECRET_KEY:                      os.Getenv("AWS_SECRET_KEY"),
+		AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME: os.Getenv("AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME"),
 	}
 }

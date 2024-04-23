@@ -2,6 +2,7 @@ package announcements
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -18,6 +19,37 @@ func NewAnnouncementsRepository() *AnnouncementsRepository {
 	return &AnnouncementsRepository{
 		db: utils.GetDatabase(),
 	}
+}
+
+func (r *AnnouncementsRepository) GetById(id string) (*CompanyAnnouncement, error) {
+	query := squirrel.Select("*").From(TABLE_NAME).
+		PlaceholderFormat(squirrel.Dollar).
+		Where(squirrel.Eq{"id": id}).
+		Where("deleted_at is null").
+		Limit(1).
+		RunWith(r.db)
+
+	row := query.QueryRow()
+
+	var announcement CompanyAnnouncement
+	row.Scan(
+		&announcement.Id,
+		&announcement.TickerCode,
+		&announcement.Subject,
+		&announcement.AnnouncementType,
+		&announcement.AnnouncementDate,
+		&announcement.FileUrl,
+		&announcement.OriginalFileUrl,
+		&announcement.CreatedAt,
+		&announcement.UpdatedAt,
+		&announcement.DeletedAt,
+	)
+
+	if announcement.TickerCode == "" {
+		return nil, errors.New(fmt.Sprintf("Can't find CompanyAnnouncement with ID: %s", id))
+	}
+
+	return &announcement, nil
 }
 
 func (r *AnnouncementsRepository) GetByTickerCodeAndYear(tickerCode string, year int) []CompanyAnnouncement {

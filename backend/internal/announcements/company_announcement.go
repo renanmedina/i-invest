@@ -1,6 +1,7 @@
 package announcements
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -18,6 +19,14 @@ type CompanyAnnouncement struct {
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
 	DeletedAt        time.Time `json:"deleted_at"`
+}
+
+func (a CompanyAnnouncement) MakeTempFileName() string {
+	return fmt.Sprintf("announcement_file_%s_%s.pdf", a.TickerCode, a.Id.String())
+}
+
+func (a CompanyAnnouncement) MakeUploadPath() string {
+	return fmt.Sprintf("%s/%s", a.TickerCode, a.MakeTempFileName())
 }
 
 func translateAnnouncementFromApiResults(tickerCode string, apiItems []market.AnnouncementApiItem) []CompanyAnnouncement {

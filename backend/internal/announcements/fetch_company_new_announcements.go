@@ -1,18 +1,21 @@
 package announcements
 
 import (
+	"github.com/renanmedina/investment-warlock/internal/event_store"
 	"github.com/renanmedina/investment-warlock/internal/market"
 )
 
 type FetchCompanyNewAnnouncement struct {
 	allAnnouncements     *AnnouncementsRepository
 	announcementsService *market.AnnouncementService
+	publisher            *event_store.EventPublisher
 }
 
 func NewFetchCompanyNewAnnouncements() *FetchCompanyNewAnnouncement {
 	return &FetchCompanyNewAnnouncement{
 		allAnnouncements:     NewAnnouncementsRepository(),
 		announcementsService: market.NewAnnouncementsService(),
+		publisher:            event_store.NewEventPublisherWith(configureEventHandlers()),
 	}
 }
 
@@ -24,9 +27,9 @@ func (uc *FetchCompanyNewAnnouncement) Execute(tickerCode string, year int) []Co
 	}
 
 	announcements := result.Items
-	// if announcements == nil || (announcements != nil && len(announcements) > 0) {
-	// 	return make([]CompanyAnnouncement, 0)
-	// }
+	if announcements == nil || (announcements != nil && len(announcements) == 0) {
+		return make([]CompanyAnnouncement, 0)
+	}
 
 	translatedAnnouncements := translateAnnouncementFromApiResults(tickerCode, announcements)
 	savedAnnouncements := uc.allAnnouncements.GetByTickerCodeAndYear(tickerCode, year)
@@ -37,13 +40,12 @@ func (uc *FetchCompanyNewAnnouncement) Execute(tickerCode string, year int) []Co
 
 	for _, newAnnouncement := range newAnnouncements {
 		uc.allAnnouncements.Save(newAnnouncement)
-		// uc.publishAnnouncementEvent(newAnnouncement)
+		event := NewCompanyAnnouncementCreatedEvent(&newAnnouncement)
+		uc.publisher.Publish(event)
 	}
 
 	return newAnnouncements
 }
-
-func (uc *FetchCompanyNewAnnouncement) publishAnnouncementEvent(announcement CompanyAnnouncement) {}
 
 func diffCompanyAnnouncements(pivotList *[]CompanyAnnouncement, savedList *[]CompanyAnnouncement) []CompanyAnnouncement {
 	missingAnnouncements := make([]CompanyAnnouncement, 0)
