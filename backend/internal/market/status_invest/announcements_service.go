@@ -41,11 +41,19 @@ func (s *AnnouncementService) GetByTickerCodeAndYear(tickerCode string, year int
 		"code": tickerCode,
 	}
 
-	results, err := s.apiClient.Get("/acao/getassetreports", params)
+	results, err := s.apiClient.Get("/acao/getassetreports", params, defaultHeaders())
 
 	if err != nil {
 		return AnnouncementApiResults{}, err
 	}
 
 	return *results, nil
+}
+
+func defaultHeaders() map[string]string {
+	return map[string]string{
+		"Content-Type": "application/json",
+		"User-Agent":   "PostmanRuntime/7.37.3",
+		"Accept":       "*/*",
+	}
 }

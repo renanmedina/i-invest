@@ -50,8 +50,8 @@ func parseResult[T any](data []byte) (*T, error) {
 	return &resultData, nil
 }
 
-func (client *ApiClient[T]) Get(path string, params map[string]string) (*T, error) {
-	request, err := client.buildRequest("GET", path, params)
+func (client *ApiClient[T]) Get(path string, params map[string]string, headers map[string]string) (*T, error) {
+	request, err := client.buildRequest("GET", path, params, headers)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +59,8 @@ func (client *ApiClient[T]) Get(path string, params map[string]string) (*T, erro
 	return client.parseResponse(response, err)
 }
 
-func (client *ApiClient[T]) Post(path string, params map[string]string) (*T, error) {
-	request, err := client.buildRequest("POST", path, params)
+func (client *ApiClient[T]) Post(path string, params map[string]string, headers map[string]string) (*T, error) {
+	request, err := client.buildRequest("POST", path, params, headers)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (client *ApiClient[T]) parseResponse(response *http.Response, err error) (*
 	return parsed, nil
 }
 
-func (client *ApiClient[T]) buildRequest(requestMethod string, path string, params map[string]string) (*http.Request, error) {
+func (client *ApiClient[T]) buildRequest(requestMethod string, path string, params map[string]string, headers map[string]string) (*http.Request, error) {
 	url := client.BuildUrl(path, params)
 	paramsBuffer := bytes.NewBuffer(make([]byte, 0))
 
@@ -105,9 +105,9 @@ func (client *ApiClient[T]) buildRequest(requestMethod string, path string, para
 		return nil, err
 	}
 
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("User-Agent", "PostmanRuntime/7.37.3")
-	request.Header.Add("Accept", "*/*")
+	for headerKey, headerValue := range headers {
+		request.Header.Add(headerKey, headerValue)
+	}
 
 	return request, nil
 }
