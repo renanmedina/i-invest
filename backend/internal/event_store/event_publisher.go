@@ -1,5 +1,12 @@
 package event_store
 
+import (
+	"fmt"
+	"reflect"
+
+	"github.com/renanmedina/investment-warlock/utils"
+)
+
 type PublishableEvent interface {
 	Name() string
 	ObjectId() string
@@ -31,9 +38,13 @@ func (p *EventPublisher) Publish(event PublishableEvent) bool {
 	eventHandlers, exists := p.handlers[event.Name()]
 
 	if exists {
-		for _, handler := range eventHandlers {
-			go handler.Handle(event)
-		}
+		go (func(evt PublishableEvent, handlers []EventHandler) {
+			for _, handler := range handlers {
+				logMsg := fmt.Sprintf("Calling handler %s for event %s", reflect.TypeOf(handler), event.Name())
+				utils.LogInfo(logMsg)
+				handler.Handle(event)
+			}
+		})(event, eventHandlers)
 
 		return true
 	}

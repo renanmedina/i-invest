@@ -7,6 +7,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const (
+	LOG_FORMAT_TEXT = "text"
+	LOG_FORMAT_JSON = "json"
+)
+
 type Configs struct {
 	DB_URI                              string
 	DB_HOST                             string
@@ -20,6 +25,13 @@ type Configs struct {
 	AWS_ACCESS_KEY                      string
 	AWS_SECRET_KEY                      string
 	AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME string
+	LOG_FORMAT                          string
+}
+
+var loadedConfigs *Configs
+
+func init() {
+	loadedConfigs = loadConfigs()
 }
 
 func (c *Configs) DbConnectionInfo() string {
@@ -29,13 +41,17 @@ func (c *Configs) DbConnectionInfo() string {
 	)
 }
 
-func GetConfigs() Configs {
+func GetConfigs() *Configs {
+	return loadedConfigs
+}
+
+func loadConfigs() *Configs {
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return Configs{
+	return &Configs{
 		DB_URI:                              os.Getenv("DB_URL"),
 		DB_HOST:                             os.Getenv("DB_HOST"),
 		DB_PORT:                             os.Getenv("DB_PORT"),
@@ -48,5 +64,6 @@ func GetConfigs() Configs {
 		AWS_ACCESS_KEY:                      os.Getenv("AWS_ACCESS_KEY"),
 		AWS_SECRET_KEY:                      os.Getenv("AWS_SECRET_KEY"),
 		AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME: os.Getenv("AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME"),
+		LOG_FORMAT:                          os.Getenv("LOG_FORMAT"),
 	}
 }

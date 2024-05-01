@@ -21,7 +21,7 @@ func (s *S3FileStorageService) Upload(sourceFile string, destPath string) (strin
 	file, err := os.Open(sourceFile)
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	defer file.Close()
@@ -33,7 +33,7 @@ func (s *S3FileStorageService) Upload(sourceFile string, destPath string) (strin
 	})
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	return uploadOutput.Location, nil
@@ -51,6 +51,6 @@ func NewS3FileStorage() (*S3FileStorageService, error) {
 
 	return &S3FileStorageService{
 		awsClient: s3manager.NewUploader(session),
-		configs:   &configs,
+		configs:   configs,
 	}, nil
 }

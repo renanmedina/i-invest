@@ -6,19 +6,23 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func GetDatabase() *sql.DB {
+var db *sql.DB
+
+func init() {
+	initDB()
+}
+
+func initDB() {
 	configs := GetConfigs()
-	connection, err := sql.Open("postgres", configs.DB_URI)
+	openedDb, err := sql.Open("postgres", configs.DB_URI)
 
 	if err != nil {
 		panic(err)
 	}
 
-	return connection
+	db = openedDb
 }
 
-// func MigrateDb() {
-// 	connection := postgres.WithInstance(GetDatabase(), &postgres.Config{})
-// 	m, err := migrate.NewWithDatabaseInstance("file:///db/migrations", "postgres", connection)
-// 	m.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
-// }
+func GetDatabase() *sql.DB {
+	return db
+}
