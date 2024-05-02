@@ -13,7 +13,7 @@ import (
 const TABLE_NAME = "company_announcements"
 
 type AnnouncementsRepository struct {
-	db *sql.DB
+	db *utils.DatabaseAdapdater
 }
 
 func NewAnnouncementsRepository() *AnnouncementsRepository {
@@ -75,7 +75,7 @@ func (r *AnnouncementsRepository) GetById(id string) (*CompanyAnnouncement, erro
 		Where(squirrel.Eq{"id": id}).
 		Where("deleted_at is null").
 		Limit(1).
-		RunWith(r.db)
+		RunWith(r.db.GetConnection())
 
 	announcement, err := BuildAnnouncementFromDb(query.QueryRow())
 
@@ -92,7 +92,7 @@ func (r *AnnouncementsRepository) GetByTickerCodeAndYear(tickerCode string, year
 		Where(squirrel.Eq{"ticker_code": tickerCode}).
 		Where("DATE_PART('year', announcement_date::timestamp) = ?", year).
 		Where("deleted_at is null").
-		RunWith(r.db)
+		RunWith(r.db.GetConnection())
 
 	rows, err := query.Query()
 
@@ -109,25 +109,20 @@ func (r *AnnouncementsRepository) Save(announcement *CompanyAnnouncement) (*Comp
 	var err error
 
 	if announcement.Persisted {
-		_, err = squirrel.Update(TABLE_NAME).
-			Set("file_url", announcement.FileUrl).
-			Set("updated_at", time.Now()).
-			Where(squirrel.Eq{"id": announcement.Id}).
-			RunWith(r.db).
-			PlaceholderFormat(squirrel.Dollar).
-			Exec()
+		_, err = r.db.Update(TABLE_NAME, map[string]interface{}{
+			"file_url":   announcement.FileUrl,
+			"updated_at": time.Now(),
+		}, squirrel.Eq{"id": announcement.Id})
 	} else {
-		_, err = squirrel.Insert(TABLE_NAME).
-			Columns("id", "ticker_code", "title", "announcement_type",
-				"announcement_date", "file_url", "original_file_url",
-			).Values(
-			announcement.Id, announcement.TickerCode, announcement.Subject,
-			announcement.AnnouncementType, announcement.AnnouncementDate, announcement.FileUrl,
-			announcement.OriginalFileUrl,
-		).
-			RunWith(r.db).
-			PlaceholderFormat(squirrel.Dollar).
-			Exec()
+		_, err = r.db.Insert(TABLE_NAME, map[string]interface{}{
+			"id":                announcement.Id,
+			"ticker_code":       announcement.TickerCode,
+			"title":             announcement.Subject,
+			"announcement_type": announcement.AnnouncementType,
+			"announcement_date": announcement.AnnouncementDate,
+			"file_url":          announcement.FileUrl,
+			"original_file_url": announcement.OriginalFileUrl,
+		})
 	}
 
 	if err != nil {

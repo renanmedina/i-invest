@@ -1,2 +1,2 @@
 #!/bin/bash
-migrate -source file://db/migrations -database postgres://postgres:postgres@localhost:5432/investment_warlock?sslmode=disable up
+migrate -source file://db/migrations -database postgres://postgres:postgres@localhost:5432/investment_warlock?sslmode=disable $1
