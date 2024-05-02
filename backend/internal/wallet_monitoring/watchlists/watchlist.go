@@ -6,9 +6,9 @@ import (
 )
 
 type Watchlist struct {
-	Id        uuid.UUID
+	Id        uuid.UUID `json:"id"`
 	userId    uuid.UUID
-	Name      string
+	Name      string `json:"name"`
 	assets    []WatchedAsset
 	Persisted bool
 }
@@ -16,7 +16,7 @@ type Watchlist struct {
 func NewEmptyWatchlist(userId uuid.UUID) Watchlist {
 	return Watchlist{
 		Id:     uuid.New(),
-		Name:   "New Watchlit",
+		Name:   "New Watchlist",
 		userId: userId,
 	}
 }
@@ -46,7 +46,7 @@ func (w *Watchlist) importFromB3(items *[]b3.B3SummaryReportItem) *Watchlist {
 			continue
 		}
 
-		w.assets = append(w.assets, NewWatchedAsset(item.TickerCode, item.Type))
+		w.AddAsset(NewWatchedAsset(item.TickerCode, item.Type))
 	}
 
 	return w

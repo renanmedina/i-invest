@@ -30,20 +30,22 @@ func (uc *ImportWatchlistFromB3Summary) Execute(userId uuid.UUID, filepath strin
 		return nil, err
 	}
 
-	var watchlistObj *Watchlist
-	*watchlistObj = NewEmptyWatchlist(userId)
+	watchlistObj := NewEmptyWatchlist(userId)
 
 	if watchlistId != nil {
-		watchlistObj, err = uc.allWatchlists.GetById(*watchlistId)
+		existingWatchlist, err := uc.allWatchlists.GetById(*watchlistId)
 
 		if err != nil {
 			logMsg := fmt.Sprintf("Failed to import watchlist %s from b3 summary of %s to watchlist %s with: %s", filepath, *watchlistId, err.Error())
 			uc.logger.Error(logMsg)
 			return nil, err
 		}
+
+		watchlistObj = *existingWatchlist
 	}
 
+	fmt.Println(parsedItems)
 	watchlistObj.importFromB3(&parsedItems)
-	uc.allWatchlists.Save(watchlistObj)
-	return watchlistObj, nil
+	uc.allWatchlists.Save(&watchlistObj)
+	return &watchlistObj, nil
 }

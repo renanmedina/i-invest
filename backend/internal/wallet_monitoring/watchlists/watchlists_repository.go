@@ -3,6 +3,7 @@ package watchlists
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/Masterminds/squirrel"
@@ -99,6 +100,7 @@ func (r *WatchlistsRepository) saveAssets(watchlist *Watchlist) error {
 	_, err := r.db.Delete(ASSETS_TABLE_NAME, squirrel.Eq{"watchlist_id": watchlist.Id})
 
 	if err != nil {
+		panic(err)
 		return err
 	}
 
@@ -110,6 +112,9 @@ func (r *WatchlistsRepository) saveAssets(watchlist *Watchlist) error {
 		})
 
 		if err != nil {
+			fmt.Println(asset.TickerCode)
+			fmt.Println(asset.Kind)
+			panic(err)
 			return err
 		}
 	}

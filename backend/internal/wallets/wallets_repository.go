@@ -1,13 +1,11 @@
 package wallets
 
 import (
-	"database/sql"
-
 	"github.com/renanmedina/investment-warlock/utils"
 )
 
 type WalletRepository struct {
-	db *sql.DB
+	db *utils.DatabaseAdapdater
 }
 
 func NewWalletRepository() *WalletRepository {
