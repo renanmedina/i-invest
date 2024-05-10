@@ -44,7 +44,6 @@ func (uc *ImportWatchlistFromB3Summary) Execute(userId uuid.UUID, filepath strin
 		watchlistObj = *existingWatchlist
 	}
 
-	fmt.Println(parsedItems)
 	watchlistObj.importFromB3(&parsedItems)
 	uc.allWatchlists.Save(&watchlistObj)
 	return &watchlistObj, nil

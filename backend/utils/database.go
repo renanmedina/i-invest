@@ -42,7 +42,7 @@ func (adapter *DatabaseAdapdater) GetConnection() *sql.DB {
 
 func (adapter *DatabaseAdapdater) Insert(tableName string, fieldsAndValues map[string]interface{}) (bool, error) {
 	columns := getKeys(fieldsAndValues)
-	fieldValues := getValues(fieldsAndValues)
+	fieldValues := getValuesOrdered(columns, fieldsAndValues)
 
 	_, errInsert := squirrel.
 		Insert(tableName).
@@ -102,12 +102,12 @@ func getKeys(mapVar map[string]interface{}) []string {
 	return keys
 }
 
-func getValues(mapVar map[string]interface{}) []interface{} {
+func getValuesOrdered(columns []string, mapVar map[string]interface{}) []interface{} {
 	vals := make([]interface{}, len(mapVar))
 
 	i := 0
-	for _, val := range mapVar {
-		vals[i] = val
+	for _, column := range columns {
+		vals[i] = mapVar[column]
 		i++
 	}
 
