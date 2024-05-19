@@ -8,8 +8,8 @@ type WatchedAsset struct {
 }
 
 type WatchedAssetSetting struct {
-	NotifyNewAnnouncements        bool `json:"notify_new_announcements"`
-	NotifyOccupationRateVariation bool `json:"notify_occupation_rate_variation"`
+	MonitorAnnouncementsEnabled           bool `json:"monitor_announcements_enabled"`
+	MonitorOccupationRateVariationEnabled bool `json:"monitor_occupation_rate_variation_enabled"`
 }
 
 func NewWatchedAsset(tickerCode string, TickerType string) WatchedAsset {
