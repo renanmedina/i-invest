@@ -32,11 +32,13 @@ func initializeHandlers(router *gin.Engine) {
 	apiGroup.POST("/wallets/:id/import-b3", handlers.ImportWalletFromB3)
 	apiGroup.POST("/wallets/:id/import-b3-transactions", handlers.ImportWalletTransactionsFromB3)
 
-	apiGroup.POST("/watchlists/import-b3", handlers.ImportWatchlistFromB3SummaryReport)
+	watchlistsGroup := apiGroup.Group("/watchlists")
+	watchlistsGroup.POST("/import-b3", handlers.ImportWatchlistFromB3SummaryReport)
+	watchlistsGroup.GET("/fetch-announcements", handlers.FetchNewAnnouncements)
 
 	marketGroup := router.Group("/market")
 	marketGroup.GET("/:tickerId/announcements", handlers.MarketTickerAnnouncements)
-	marketGroup.GET("/:tickerId/fetch-new-announcements", handlers.FetchCompanyNewAnnouncements)
+	marketGroup.GET("/:tickerId/fetch-new-announcements", handlers.FetchNewAnnouncements)
 }
 
 func startWebserver(router *gin.Engine) {

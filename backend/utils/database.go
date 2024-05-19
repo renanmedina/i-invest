@@ -2,6 +2,7 @@ package utils
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/Masterminds/squirrel"
 	_ "github.com/lib/pq"
@@ -24,6 +25,10 @@ func init() {
 func initDB() {
 	configs := GetConfigs()
 	openedDb, err := sql.Open("postgres", configs.DB_URI)
+
+	openedDb.SetMaxOpenConns(20) // Sane default
+	openedDb.SetMaxIdleConns(0)
+	openedDb.SetConnMaxLifetime(time.Nanosecond)
 
 	if err != nil {
 		panic(err)

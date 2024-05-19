@@ -33,5 +33,35 @@
         "group": "investment-warlock-runtime"
       }
     },
+    {
+      "label": "▶︎ Backend: Migrate DB Up",
+      "type": "shell",
+      "command": "cd backend && ./migrate_db.sh up",
+      "windows": {
+        "command": "cd backend &&  ./migrate_db.sh up"
+      },
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "close": true,
+        "group": "investment-warlock-runtime"
+      }
+    },
+    {
+      "label": "▶︎ Backend: Migrate DB Down",
+      "type": "shell",
+      "command": "cd backend && ./migrate_db.sh down --force",
+      "windows": {
+        "command": "cd backend &&  ./migrate_db.sh down --force"
+      },
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "close": true,
+        "group": "investment-warlock-runtime"
+      }
+    },
   ]
 }

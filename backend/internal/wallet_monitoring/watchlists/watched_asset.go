@@ -7,11 +7,15 @@ type WatchedAsset struct {
 	Persisted  bool
 }
 
-type WatchedAssetSetting struct{}
+type WatchedAssetSetting struct {
+	NotifyNewAnnouncements        bool `json:"notify_new_announcements"`
+	NotifyOccupationRateVariation bool `json:"notify_occupation_rate_variation"`
+}
 
 func NewWatchedAsset(tickerCode string, TickerType string) WatchedAsset {
 	return WatchedAsset{
 		TickerCode: tickerCode,
 		Kind:       TickerType,
+		Settings:   WatchedAssetSetting{true, true},
 	}
 }

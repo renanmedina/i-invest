@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring"
 	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring/watchlists"
 )
 
@@ -24,4 +25,10 @@ func ImportWatchlistFromB3SummaryReport(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"watchlist": watchlist,
 	})
+}
+
+func FetchNewAnnouncements(c *gin.Context) {
+	use_case := wallet_monitoring.NewFetchAnnouncementsForWatchedTickers()
+	use_case.Execute()
+	c.JSON(http.StatusOK, nil)
 }

@@ -2,6 +2,7 @@ package watchlists
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -103,10 +104,13 @@ func (r *WatchlistsRepository) saveAssets(watchlist *Watchlist) error {
 	}
 
 	for _, asset := range watchlist.assets {
+		configs, err := json.Marshal(asset.Settings)
+
 		_, err = r.db.Insert(ASSETS_TABLE_NAME, map[string]interface{}{
 			"watchlist_id": watchlist.Id,
 			"ticker_code":  asset.TickerCode,
 			"ticker_type":  asset.Kind,
+			"configs":      configs,
 		})
 
 		if err != nil {
