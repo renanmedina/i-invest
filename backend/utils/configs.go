@@ -26,6 +26,10 @@ type Configs struct {
 	AWS_SECRET_KEY                      string
 	AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME string
 	LOG_FORMAT                          string
+	TWILIO_ACCOUNT_SSID                 string
+	TWILIO_API_SID                      string
+	TWILIO_API_SECRET                   string
+	TWILIO_SMS_SERVICE_SSID             string
 }
 
 var loadedConfigs *Configs
@@ -48,7 +52,7 @@ func GetConfigs() *Configs {
 func loadConfigs() *Configs {
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 
 	return &Configs{
@@ -65,5 +69,9 @@ func loadConfigs() *Configs {
 		AWS_SECRET_KEY:                      os.Getenv("AWS_SECRET_KEY"),
 		AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME: os.Getenv("AWS_ANNOUNCEMENTS_FILES_BUCKET_NAME"),
 		LOG_FORMAT:                          os.Getenv("LOG_FORMAT"),
+		TWILIO_ACCOUNT_SSID:                 os.Getenv("TWILIO_ACCOUNT_SSID"),
+		TWILIO_API_SID:                      os.Getenv("TWILIO_API_SID"),
+		TWILIO_API_SECRET:                   os.Getenv("TWILIO_API_SECRET"),
+		TWILIO_SMS_SERVICE_SSID:             os.Getenv("TWILIO_SMS_SERVICE_SSID"),
 	}
 }

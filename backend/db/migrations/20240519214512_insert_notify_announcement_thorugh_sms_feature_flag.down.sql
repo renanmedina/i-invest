@@ -1,0 +1,1 @@
+DELETE FROM feature_flags WHERE feature_name = 'notify_announcement_through_sms';

@@ -22,6 +22,11 @@ type CompanyAnnouncement struct {
 	Persisted        bool
 }
 
+func (a CompanyAnnouncement) ForToday() bool {
+	today := time.Now()
+	return a.AnnouncementDate.Format("2006-02-01") == today.Format("2006-02-01")
+}
+
 func (a CompanyAnnouncement) MakeTempFileName() string {
 	return fmt.Sprintf("announcement_file_%s_%s.pdf", a.TickerCode, a.Id.String())
 }

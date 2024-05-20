@@ -1,0 +1,1 @@
+INSERT INTO feature_flags(feature_name, enabled) VALUES('notify_announcement_through_sms', false);

@@ -57,7 +57,7 @@ func (r *WatchlistsRepository) GetById(watchlistId string) (*Watchlist, error) {
 		RunWith(r.db.GetConnection())
 
 	queryAssets, _ := squirrel.
-		Select("ticker_code, ticker_type").
+		Select("ticker_code, ticker_type, configs").
 		From(ASSETS_TABLE_NAME).
 		PlaceholderFormat(squirrel.Dollar).
 		Where(squirrel.Eq{"watchlist_id": watchlistId}).

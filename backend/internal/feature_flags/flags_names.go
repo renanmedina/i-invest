@@ -1,0 +1,3 @@
+package feature_flags
+
+const FLAG_NOTIFY_ANNOUNCEMENT_THROUGH_SMS = "notify_announcement_through_sms"

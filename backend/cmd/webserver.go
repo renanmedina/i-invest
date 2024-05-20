@@ -38,7 +38,7 @@ func initializeHandlers(router *gin.Engine) {
 
 	marketGroup := router.Group("/market")
 	marketGroup.GET("/:tickerId/announcements", handlers.MarketTickerAnnouncements)
-	marketGroup.GET("/:tickerId/fetch-new-announcements", handlers.FetchNewAnnouncements)
+	marketGroup.GET("/:tickerId/fetch-new-announcements", handlers.FetchCompanyNewAnnouncements)
 }
 
 func startWebserver(router *gin.Engine) {
