@@ -1,0 +1,15 @@
+{
+  "short_name": "brapi",
+  "name": "brapi - API de finanças",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#111827",
+  "theme_color": "#7347AB"
+}
