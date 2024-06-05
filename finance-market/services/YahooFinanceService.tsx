@@ -4,7 +4,7 @@ import { QuoteProps } from "~/@types/QuoteProps";
 
 export default class YahooFinanceService {
   private _http: any;
-  private _stockUrl: string = 'https://query1.finance.yahoo.com/v7/finance/options';
+  private _stockUrl: string = 'https://query1.finance.yahoo.com/v6/finance/options';
   private _historyUrl: string = 'https://query1.finance.yahoo.com/v8/finance/chart';
 
   constructor(http = axios) {
