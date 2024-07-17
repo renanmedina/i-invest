@@ -7,24 +7,35 @@ import (
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/renanmedina/investment-warlock/utils"
 )
 
 type ApiClient[T any] struct {
 	httpClient http.Client
 	baseUrl    string
 	authToken  string
+	logger     *utils.ApplicationLogger
 }
 
 type ApiConfig struct {
-	ApiUrl    string
-	AuthToken string
+	ApiUrl     string
+	AuthToken  string
+	LogEnabled bool
 }
 
 func NewApiClient[T any](config ApiConfig) ApiClient[T] {
+	var logger *utils.ApplicationLogger
+
+	if config.LogEnabled {
+		logger = utils.GetApplicationLogger()
+	}
+
 	return ApiClient[T]{
 		httpClient: http.Client{},
 		baseUrl:    config.ApiUrl,
 		authToken:  config.AuthToken,
+		logger:     logger,
 	}
 }
 
@@ -51,20 +62,18 @@ func parseResult[T any](data []byte) (*T, error) {
 }
 
 func (client *ApiClient[T]) Get(path string, params map[string]string, headers map[string]string) (*T, error) {
-	request, err := client.buildRequest("GET", path, params, headers)
+	response, err := client.performRequest("GET", path, params, headers)
 	if err != nil {
 		return nil, err
 	}
-	response, err := client.httpClient.Do(request)
 	return client.parseResponse(response, err)
 }
 
 func (client *ApiClient[T]) Post(path string, params map[string]string, headers map[string]string) (*T, error) {
-	request, err := client.buildRequest("POST", path, params, headers)
+	response, err := client.performRequest("POST", path, params, headers)
 	if err != nil {
 		return nil, err
 	}
-	response, err := client.httpClient.Do(request)
 	return client.parseResponse(response, err)
 }
 
@@ -87,7 +96,7 @@ func (client *ApiClient[T]) parseResponse(response *http.Response, err error) (*
 	return parsed, nil
 }
 
-func (client *ApiClient[T]) buildRequest(requestMethod string, path string, params map[string]string, headers map[string]string) (*http.Request, error) {
+func (client *ApiClient[T]) performRequest(requestMethod string, path string, params map[string]string, headers map[string]string) (*http.Response, error) {
 	url := client.BuildUrl(path, params)
 	paramsBuffer := bytes.NewBuffer(make([]byte, 0))
 
@@ -105,9 +114,26 @@ func (client *ApiClient[T]) buildRequest(requestMethod string, path string, para
 		return nil, err
 	}
 
+	if client.authToken != "" {
+		headers["Authorization"] = fmt.Sprintf("Bearer %s", client.authToken)
+		headers["Accept"] = "*/*"
+		headers["Content-Type"] = "application/json"
+	}
+
 	for headerKey, headerValue := range headers {
 		request.Header.Add(headerKey, headerValue)
 	}
 
-	return request, nil
+	client.log(fmt.Sprintf("Sending http request to %s", url))
+	response, err := client.httpClient.Do(request)
+	client.log(fmt.Sprintf("Response Status: %s", response.Status))
+	client.log(fmt.Sprintf("Response StatusCode: %d", response.StatusCode))
+
+	return response, err
+}
+
+func (client *ApiClient[T]) log(message string) {
+	if client.logger != nil {
+		client.logger.Info(message)
+	}
 }

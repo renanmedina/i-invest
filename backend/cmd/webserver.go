@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/renanmedina/investment-warlock/web/handlers"
 )
