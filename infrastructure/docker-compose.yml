@@ -7,12 +7,11 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - ./create-db.sql:/docker-entrypoint-initdb.d/create_database.sql
   metabase:
     image: metabase/metabase:latest
     container_name: investment-warlock-metabase

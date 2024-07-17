@@ -2,3 +2,7 @@ wallet.json
 transactions.csv
 .env
 *.log
+
+backend/tmp/*
+backend/dist/*
+!backend/dist/.keep
