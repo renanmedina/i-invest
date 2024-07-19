@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 const TABLE_NAME = "company_announcements"

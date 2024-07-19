@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose -p="investment-warlock" up -d
+docker-compose -p="i-invest" up -d

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 const TABLE_NAME = "events"

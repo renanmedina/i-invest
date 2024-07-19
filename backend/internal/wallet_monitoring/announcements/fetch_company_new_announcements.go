@@ -1,8 +1,8 @@
 package announcements
 
 import (
-	"github.com/renanmedina/investment-warlock/internal/event_store"
-	"github.com/renanmedina/investment-warlock/internal/market"
+	"github.com/renanmedina/i-invest/internal/event_store"
+	"github.com/renanmedina/i-invest/internal/market"
 )
 
 type FetchCompanyNewAnnouncement struct {

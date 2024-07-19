@@ -2,7 +2,7 @@ package wallets
 
 import (
 	"fmt"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )

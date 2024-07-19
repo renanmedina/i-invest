@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/renanmedina/investment-warlock/internal/market"
-	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring/announcements"
+	"github.com/renanmedina/i-invest/internal/market"
+	"github.com/renanmedina/i-invest/internal/wallet_monitoring/announcements"
 )
 
 func MarketTickerAnnouncements(c *gin.Context) {

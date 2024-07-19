@@ -3,7 +3,7 @@ package announcements
 import (
 	"time"
 
-	"github.com/renanmedina/investment-warlock/internal/wallets"
+	"github.com/renanmedina/i-invest/internal/wallets"
 )
 
 type FetchAnnouncementsForWallet struct {

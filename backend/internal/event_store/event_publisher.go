@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type PublishableEvent interface {

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring"
-	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring/watchlists"
+	"github.com/renanmedina/i-invest/internal/wallet_monitoring"
+	"github.com/renanmedina/i-invest/internal/wallet_monitoring/watchlists"
 )
 
 func ImportWatchlistFromB3SummaryReport(c *gin.Context) {

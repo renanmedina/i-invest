@@ -2,7 +2,7 @@ package watchlists
 
 import (
 	"github.com/google/uuid"
-	"github.com/renanmedina/investment-warlock/internal/wallets/b3"
+	"github.com/renanmedina/i-invest/internal/wallets/b3"
 )
 
 type Watchlist struct {

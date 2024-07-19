@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/renanmedina/investment-warlock/internal/market"
+	"github.com/renanmedina/i-invest/internal/market"
 )
 
 type CompanyAnnouncement struct {

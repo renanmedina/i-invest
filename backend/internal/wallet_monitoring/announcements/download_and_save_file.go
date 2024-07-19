@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/renanmedina/investment-warlock/internal/event_store"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/internal/event_store"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type DownloadAndSaveAnnouncementFileHandler struct{}

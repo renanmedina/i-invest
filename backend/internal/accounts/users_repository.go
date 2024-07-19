@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring/watchlists"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/internal/wallet_monitoring/watchlists"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type UsersRepository struct {

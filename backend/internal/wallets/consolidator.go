@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/renanmedina/investment-warlock/internal/market/brapi"
+	"github.com/renanmedina/i-invest/internal/market/brapi"
 )
 
 type ConsolidatorItem struct {

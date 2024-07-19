@@ -1,4 +1,4 @@
-module github.com/renanmedina/investment-warlock
+module github.com/renanmedina/i-invest
 
 go 1.22
 

@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type ApiClient[T any] struct {

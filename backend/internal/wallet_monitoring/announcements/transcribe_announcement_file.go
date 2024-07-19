@@ -3,7 +3,7 @@ package announcements
 import (
 	"fmt"
 
-	"github.com/renanmedina/investment-warlock/internal/event_store"
+	"github.com/renanmedina/i-invest/internal/event_store"
 )
 
 type TranscribeAnnouncementFileHandler struct{}

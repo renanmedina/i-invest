@@ -2,7 +2,7 @@ package watchlists
 
 import (
 	"github.com/Masterminds/squirrel"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type WatchedAssetRepository struct {

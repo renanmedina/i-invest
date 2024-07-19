@@ -15,7 +15,7 @@
         "reveal": "always",
         "panel": "new",
         "close": true,
-        "group": "investment-warlock-runtime"
+        "group": "i-invest-runtime"
       }
     },
     {
@@ -30,7 +30,7 @@
         "reveal": "always",
         "panel": "new",
         "close": true,
-        "group": "investment-warlock-runtime"
+        "group": "i-invest-runtime"
       }
     },
     {
@@ -45,7 +45,7 @@
         "reveal": "always",
         "panel": "new",
         "close": true,
-        "group": "investment-warlock-runtime"
+        "group": "i-invest-runtime"
       }
     },
     {
@@ -60,7 +60,7 @@
         "reveal": "always",
         "panel": "new",
         "close": true,
-        "group": "investment-warlock-runtime"
+        "group": "i-invest-runtime"
       }
     },
   ]

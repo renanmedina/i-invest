@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/renanmedina/investment-warlock/internal/market/brapi"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/internal/market/brapi"
+	"github.com/renanmedina/i-invest/utils"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 )

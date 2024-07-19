@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/renanmedina/investment-warlock/internal/wallets/b3"
+	"github.com/renanmedina/i-invest/internal/wallets/b3"
 )
 
 type B3ImportForm struct {

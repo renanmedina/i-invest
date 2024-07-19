@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/renanmedina/investment-warlock/web/handlers"
+	"github.com/renanmedina/i-invest/web/handlers"
 )
 
 func main() {

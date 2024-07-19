@@ -1,7 +1,7 @@
 package B3
 
 import (
-	"github.com/renanmedina/investment-warlock/internal/market"
+	"github.com/renanmedina/i-invest/internal/market"
 )
 
 const API_URL = "https://investidor.b3.com.br"

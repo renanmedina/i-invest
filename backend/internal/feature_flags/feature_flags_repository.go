@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type FeatureFlagsRepository struct {

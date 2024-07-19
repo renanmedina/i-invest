@@ -3,11 +3,11 @@ package announcements
 import (
 	"fmt"
 
-	"github.com/renanmedina/investment-warlock/internal/accounts"
-	"github.com/renanmedina/investment-warlock/internal/event_store"
-	"github.com/renanmedina/investment-warlock/internal/feature_flags"
-	"github.com/renanmedina/investment-warlock/internal/notification"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/internal/accounts"
+	"github.com/renanmedina/i-invest/internal/event_store"
+	"github.com/renanmedina/i-invest/internal/feature_flags"
+	"github.com/renanmedina/i-invest/internal/notification"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type NotifyCompanyNewAnnouncementToUserHandler struct {

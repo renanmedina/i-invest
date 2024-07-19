@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jedib0t/go-pretty/v6/table"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 func BalanceWallet(wallet Wallet) {

@@ -1,7 +1,7 @@
 package announcements
 
 import (
-	"github.com/renanmedina/investment-warlock/internal/event_store"
+	"github.com/renanmedina/i-invest/internal/event_store"
 )
 
 func configureEventHandlers() map[string][]event_store.EventHandler {

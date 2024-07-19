@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/renanmedina/investment-warlock/internal/wallets/b3"
-	"github.com/renanmedina/investment-warlock/utils"
+	"github.com/renanmedina/i-invest/internal/wallets/b3"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 type ImportWatchlistFromB3Summary struct {

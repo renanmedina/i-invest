@@ -3,8 +3,8 @@ package wallet_monitoring
 import (
 	"time"
 
-	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring/announcements"
-	"github.com/renanmedina/investment-warlock/internal/wallet_monitoring/watchlists"
+	"github.com/renanmedina/i-invest/internal/wallet_monitoring/announcements"
+	"github.com/renanmedina/i-invest/internal/wallet_monitoring/watchlists"
 )
 
 type FetchAnnouncementsForWatchedTickers struct {

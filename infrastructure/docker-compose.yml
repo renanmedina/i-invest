@@ -2,7 +2,7 @@ version: "3.9"
 services:
   database:
     image: postgres:16-alpine
-    container_name: investment-warlock-db
+    container_name: i-invest-db
     restart: always
     ports:
       - "5432:5432"
@@ -14,7 +14,7 @@ services:
       - ./create-db.sql:/docker-entrypoint-initdb.d/create_database.sql
   metabase:
     image: metabase/metabase:latest
-    container_name: investment-warlock-metabase
+    container_name: i-invest-metabase
     ports: 
       - "3000:3000"
 volumes:
