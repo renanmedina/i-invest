@@ -3,6 +3,6 @@ transactions.csv
 .env
 *.log
 
-backend/tmp/*
-backend/dist/*
-!backend/dist/.keep
+investor-service/tmp/*
+investor-service/dist/*
+!investor-service/dist/.keep

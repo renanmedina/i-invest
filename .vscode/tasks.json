@@ -4,11 +4,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "▶︎ Backend: Run Dev-Webserver",
+      "label": "▶︎ InvestorService: Run Dev-Webserver",
       "type": "shell",
-      "command": "cd backend && ./start_devserver.sh",
+      "command": "cd investor-service && ./start_devserver.sh",
       "windows": {
-        "command": "cd backend && ./start_devserver.sh"
+        "command": "cd investor-service && ./start_devserver.sh"
       },
       "group": "none",
       "presentation": {
@@ -19,11 +19,11 @@
       }
     },
     {
-      "label": "▶︎ Backend: Test B3 Wallet import",
+      "label": "▶︎ InvestorService: Test B3 Wallet import",
       "type": "shell",
-      "command": "cd backend && ./test_import_b3.sh",
+      "command": "cd investor-service && ./test_import_b3.sh",
       "windows": {
-        "command": "cd backend && ./test_import_b3.sh"
+        "command": "cd investor-service && ./test_import_b3.sh"
       },
       "group": "none",
       "presentation": {
@@ -34,11 +34,11 @@
       }
     },
     {
-      "label": "▶︎ Backend: Migrate DB Up",
+      "label": "▶︎ InvestorService: Migrate DB Up",
       "type": "shell",
-      "command": "cd backend && ./migrate_db.sh up",
+      "command": "cd investor-service && ./migrate_db.sh up",
       "windows": {
-        "command": "cd backend &&  ./migrate_db.sh up"
+        "command": "cd investor-service &&  ./migrate_db.sh up"
       },
       "group": "none",
       "presentation": {
@@ -49,11 +49,11 @@
       }
     },
     {
-      "label": "▶︎ Backend: Migrate DB Down",
+      "label": "▶︎ InvestorService: Migrate DB Down",
       "type": "shell",
-      "command": "cd backend && ./migrate_db.sh down --force",
+      "command": "cd investor-service && ./migrate_db.sh down --force",
       "windows": {
-        "command": "cd backend &&  ./migrate_db.sh down --force"
+        "command": "cd investor-service &&  ./migrate_db.sh down --force"
       },
       "group": "none",
       "presentation": {
