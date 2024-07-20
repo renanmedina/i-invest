@@ -7,27 +7,27 @@ import (
 const API_URL = "https://investidor.b3.com.br"
 
 type WalletService struct {
-	transactionsApi  market.ApiClient[B3ApiResult[TransactionDayItem]]
+	negotiationsApi  market.ApiClient[B3ApiResult[NegotiationDayItem]]
 	consolidationApi market.ApiClient[B3ApiResult[ConsolidatedByProductItem]]
 }
 
 func NewWalletService(apiToken string) *WalletService {
-	transactionsApi := market.NewApiClient[B3ApiResult[TransactionDayItem]](market.ApiConfig{ApiUrl: API_URL, AuthToken: apiToken, LogEnabled: true})
+	negotiationsApi := market.NewApiClient[B3ApiResult[NegotiationDayItem]](market.ApiConfig{ApiUrl: API_URL, AuthToken: apiToken, LogEnabled: true})
 	consolidationApi := market.NewApiClient[B3ApiResult[ConsolidatedByProductItem]](market.ApiConfig{ApiUrl: API_URL, AuthToken: apiToken, LogEnabled: true})
 
 	return &WalletService{
-		transactionsApi,
+		negotiationsApi,
 		consolidationApi,
 	}
 }
 
-func (s *WalletService) GetTransactionsByDate(dateStart string, dateEnd string) ([]TransactionDayItem, error) {
+func (s *WalletService) GetNegotiationsByPeriod(dateStart string, dateEnd string) ([]NegotiationDayItem, error) {
 	params := map[string]string{
 		"dataInicio": dateStart,
 		"dataFim":    dateEnd,
 	}
 
-	response, err := s.transactionsApi.Get("/api/extrato-movimentacao/v2/movimentacao",
+	response, err := s.negotiationsApi.Get("/api/extrato-negociacao-ativos/v1/negociacao-ativos/1",
 		params,
 		make(map[string]string),
 	)
@@ -73,6 +73,29 @@ type TransactionItem struct {
 	Quantity        float32 `json:"quantidade"`
 	Amount          float64 `json:"valorOperacao"`
 	UnitPrice       float64 `json:"precoUnitario"`
+}
+
+type NegotiationDayItem struct {
+	Date         string            `json:"data"`
+	Negotiations []NegotiationItem `json:"negociacaoAtivos"`
+}
+
+type NegotiationItem struct {
+	Date          string
+	MarketName    string  `json:"mercado"`
+	OperationType string  `json:"tipoMovimentacao"`
+	TickerCode    string  `json:"codigoNegociacao"`
+	Quantity      float32 `json:"quantidade"`
+	Amount        float64 `json:"valor"`
+	UnitPrice     float64 `json:"preco"`
+}
+
+func (item *NegotiationItem) AssetType() string {
+	if item.MarketName == "Mercado Fracionário" {
+		return "stock"
+	}
+
+	return item.MarketName
 }
 
 type ConsolidatedByProductItem struct {

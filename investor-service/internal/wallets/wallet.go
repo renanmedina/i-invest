@@ -67,6 +67,11 @@ func (w Wallet) Quantity() int {
 	return quantity
 }
 
+func (w Wallet) AddTransactions(transactions []Transaction) Wallet {
+	w.Transactions = append(w.Transactions, transactions...)
+	return w
+}
+
 func (w Wallet) HasAsset(assetTicker string) bool {
 	_, alreadyOnMap := w.Consolidation[assetTicker]
 	return alreadyOnMap
