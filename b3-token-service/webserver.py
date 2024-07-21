@@ -16,11 +16,17 @@ class WebserverHandler(BaseHTTPRequestHandler):
       driver = webdriver.Chrome()
       task = token_extraction.ExtractionTask(driver)
       tokenData = task.run(os.getenv('USER_CPF'), os.getenv('USER_PASSWORD'))
-      self.send_response(200, json.dumps(tokenData, indent=2))
+      self.send_json(200, tokenData)
     else:
-      self.send_response(404)
-
+      self.send_json(404, {"error": "Path not found"})
     return
+  
+  def send_json(self, status, jsonData):
+    self.send_response(status)
+    self.send_header('Content-Type', 'application/json')
+    self.end_headers()
+    json_string = json.dumps(jsonData, indent=2, ensure_ascii=False)
+    self.wfile.write(bytes(json_string, 'utf-8'))
 
 if __name__ == "__main__":
   webServer = HTTPServer((hostName, serverPort), WebserverHandler)

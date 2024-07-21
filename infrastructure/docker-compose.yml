@@ -17,6 +17,12 @@ services:
     container_name: i-invest-metabase
     ports: 
       - "3000:3000"
+  redis:
+    image: redis:7.2-alpine
+    container_name: i-invest-cache
+    restart: always
+    ports: 
+      - "6379:6379"
 volumes:
   db-data:
     driver: "local"
