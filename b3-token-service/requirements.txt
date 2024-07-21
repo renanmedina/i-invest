@@ -1,0 +1,5 @@
+selenium==4.23.0
+selenium-wire==5.1.0
+blinker<1.8.0
+anticaptchaofficial==1.0.60
+python-dotenv==1.0.1

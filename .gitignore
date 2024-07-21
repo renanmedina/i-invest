@@ -4,5 +4,3 @@ transactions.csv
 *.log
 
 investor-service/tmp/*
-investor-service/dist/*
-!investor-service/dist/.keep
