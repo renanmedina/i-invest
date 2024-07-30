@@ -8,7 +8,7 @@
 - Gin framework
 - Postgres 16
 - Metabase (For reports)
-- Migrate CLI Tool latest (github.com/golang-migrate/migrate/cmd/migrate)
+- Migrate CLI Tool latest (github.com/golang-migrate/migrate)
 
 #### Instalation
 
