@@ -4,3 +4,4 @@ transactions.csv
 *.log
 
 investor-service/tmp/*
+investor-service/b3_token_cached.json

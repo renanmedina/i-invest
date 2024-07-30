@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from seleniumwire import webdriver
-from automations import token_extraction
+from automations import token_extraction, token_cacher
 import json
 import os
 from dotenv import load_dotenv
@@ -16,6 +16,7 @@ class WebserverHandler(BaseHTTPRequestHandler):
       driver = webdriver.Chrome()
       task = token_extraction.ExtractionTask(driver)
       tokenData = task.run(os.getenv('USER_CPF'), os.getenv('USER_PASSWORD'))
+      token_cacher.write(tokenData, filepath=os.getenv('B3_TOKEN_CACHEFILE_PATH'))
       self.send_json(200, tokenData)
     else:
       self.send_json(404, {"error": "Path not found"})
