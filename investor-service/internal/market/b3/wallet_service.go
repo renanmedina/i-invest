@@ -2,6 +2,7 @@ package B3
 
 import (
 	"github.com/renanmedina/i-invest/internal/market"
+	"github.com/renanmedina/i-invest/utils"
 )
 
 const API_URL = "https://investidor.b3.com.br"
@@ -9,6 +10,11 @@ const API_URL = "https://investidor.b3.com.br"
 type WalletService struct {
 	negotiationsApi  market.ApiClient[B3ApiResult[NegotiationDayItem]]
 	consolidationApi market.ApiClient[B3ApiResult[ConsolidatedByProductItem]]
+}
+
+func NewWalletServiceWithToken() *WalletService {
+	configs := utils.GetConfigs()
+	return NewWalletService(configs.B3_API_TOKEN)
 }
 
 func NewWalletService(apiToken string) *WalletService {

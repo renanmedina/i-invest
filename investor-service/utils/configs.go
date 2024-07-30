@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 
@@ -30,6 +31,7 @@ type Configs struct {
 	TWILIO_API_SID                      string
 	TWILIO_API_SECRET                   string
 	TWILIO_SMS_SERVICE_SSID             string
+	B3_API_TOKEN                        string
 }
 
 var loadedConfigs *Configs
@@ -55,6 +57,12 @@ func loadConfigs() *Configs {
 		panic(err)
 	}
 
+	b3Token, err := loadB3TokenCached()
+
+	if err != nil {
+		panic(err)
+	}
+
 	return &Configs{
 		DB_URI:                              os.Getenv("DB_URL"),
 		DB_HOST:                             os.Getenv("DB_HOST"),
@@ -73,5 +81,22 @@ func loadConfigs() *Configs {
 		TWILIO_API_SID:                      os.Getenv("TWILIO_API_SID"),
 		TWILIO_API_SECRET:                   os.Getenv("TWILIO_API_SECRET"),
 		TWILIO_SMS_SERVICE_SSID:             os.Getenv("TWILIO_SMS_SERVICE_SSID"),
+		B3_API_TOKEN:                        b3Token,
 	}
+}
+
+func loadB3TokenCached() (string, error) {
+	fileContent, err := os.ReadFile("./b3_token_cached.json")
+
+	if err != nil {
+		return "", err
+	}
+
+	var tokenInfo B3Token
+	json.Unmarshal(fileContent, &tokenInfo)
+	return tokenInfo.AccessToken, nil
+}
+
+type B3Token struct {
+	AccessToken string `json:"access_token"`
 }
