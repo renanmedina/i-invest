@@ -5,3 +5,7 @@ transactions.csv
 
 investor-service/tmp/*
 investor-service/b3_token_cached.json
+
+## Notification-service
+notification-service/node_modules/*
+notification-service/.env
