@@ -1,4 +1,4 @@
-package market
+package integration
 
 import (
 	"bytes"
@@ -115,7 +115,7 @@ func (client *ApiClient[T]) performRequest(requestMethod string, path string, pa
 	}
 
 	if client.authToken != "" {
-		headers["Authorization"] = fmt.Sprintf("Bearer %s", client.authToken)
+		headers["Authorization"] = fmt.Sprintf("%s", client.authToken)
 		headers["Accept"] = "*/*"
 		headers["Content-Type"] = "application/json"
 	}

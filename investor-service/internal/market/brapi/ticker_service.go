@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/renanmedina/i-invest/internal/market"
+	"github.com/renanmedina/i-invest/internal/integration"
 )
 
 type TickerService struct {
-	client market.ApiClient[TickerApiResult]
+	client integration.ApiClient[TickerApiResult]
 }
 
 type PriceHistory struct {
@@ -29,7 +29,7 @@ type Ticker struct {
 }
 
 func NewTickerService() TickerService {
-	client := market.NewApiClient[TickerApiResult](market.ApiConfig{
+	client := integration.NewApiClient[TickerApiResult](integration.ApiConfig{
 		ApiUrl: "https://brapi.dev/api",
 	})
 	return TickerService{client}

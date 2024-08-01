@@ -32,6 +32,8 @@ type Configs struct {
 	TWILIO_API_SECRET                   string
 	TWILIO_SMS_SERVICE_SSID             string
 	B3_API_TOKEN                        string
+	DISCORD_BOT_TOKEN                   string
+	DISCORD_CHANNEL_ID                  string
 }
 
 var loadedConfigs *Configs
@@ -82,6 +84,8 @@ func loadConfigs() *Configs {
 		TWILIO_API_SECRET:                   os.Getenv("TWILIO_API_SECRET"),
 		TWILIO_SMS_SERVICE_SSID:             os.Getenv("TWILIO_SMS_SERVICE_SSID"),
 		B3_API_TOKEN:                        b3Token,
+		DISCORD_BOT_TOKEN:                   os.Getenv("DISCORD_BOT_TOKEN"),
+		DISCORD_CHANNEL_ID:                  os.Getenv("DISCORD_CHANNEL_ID"),
 	}
 }
 
@@ -94,7 +98,7 @@ func loadB3TokenCached() (string, error) {
 
 	var tokenInfo B3Token
 	json.Unmarshal(fileContent, &tokenInfo)
-	return tokenInfo.AccessToken, nil
+	return "Bearer " + tokenInfo.AccessToken, nil
 }
 
 type B3Token struct {

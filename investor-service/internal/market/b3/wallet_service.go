@@ -1,15 +1,15 @@
 package B3
 
 import (
-	"github.com/renanmedina/i-invest/internal/market"
+	"github.com/renanmedina/i-invest/internal/integration"
 	"github.com/renanmedina/i-invest/utils"
 )
 
 const API_URL = "https://investidor.b3.com.br"
 
 type WalletService struct {
-	negotiationsApi  market.ApiClient[B3ApiResult[NegotiationDayItem]]
-	consolidationApi market.ApiClient[B3ApiResult[ConsolidatedByProductItem]]
+	negotiationsApi  integration.ApiClient[B3ApiResult[NegotiationDayItem]]
+	consolidationApi integration.ApiClient[B3ApiResult[ConsolidatedByProductItem]]
 }
 
 func NewWalletServiceWithToken() *WalletService {
@@ -18,8 +18,8 @@ func NewWalletServiceWithToken() *WalletService {
 }
 
 func NewWalletService(apiToken string) *WalletService {
-	negotiationsApi := market.NewApiClient[B3ApiResult[NegotiationDayItem]](market.ApiConfig{ApiUrl: API_URL, AuthToken: apiToken, LogEnabled: true})
-	consolidationApi := market.NewApiClient[B3ApiResult[ConsolidatedByProductItem]](market.ApiConfig{ApiUrl: API_URL, AuthToken: apiToken, LogEnabled: true})
+	negotiationsApi := integration.NewApiClient[B3ApiResult[NegotiationDayItem]](integration.ApiConfig{ApiUrl: API_URL, AuthToken: apiToken, LogEnabled: true})
+	consolidationApi := integration.NewApiClient[B3ApiResult[ConsolidatedByProductItem]](integration.ApiConfig{ApiUrl: API_URL, AuthToken: apiToken, LogEnabled: true})
 
 	return &WalletService{
 		negotiationsApi,

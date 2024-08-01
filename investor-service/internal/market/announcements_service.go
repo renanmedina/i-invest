@@ -2,6 +2,8 @@ package market
 
 import (
 	"strconv"
+
+	"github.com/renanmedina/i-invest/internal/integration"
 )
 
 const (
@@ -9,7 +11,7 @@ const (
 )
 
 type AnnouncementService struct {
-	apiClient ApiClient[AnnouncementApiResults]
+	apiClient integration.ApiClient[AnnouncementApiResults]
 }
 
 type AnnouncementApiResults struct {
@@ -26,7 +28,7 @@ type AnnouncementApiItem struct {
 }
 
 func NewAnnouncementsService() *AnnouncementService {
-	client := NewApiClient[AnnouncementApiResults](ApiConfig{
+	client := integration.NewApiClient[AnnouncementApiResults](integration.ApiConfig{
 		ApiUrl: "https://statusinvest.com.br",
 	})
 
