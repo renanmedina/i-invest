@@ -1,13 +1,11 @@
 from seleniumwire import webdriver
-from selenium.webdriver import ChromeOptions
-from automations import token_extraction
+from automations import token_extraction, token_cacher
+from dotenv import load_dotenv
+import os
 
-options = ChromeOptions()
-# options.add_argument("--window-size=100,100")
-# options.add_argument("--headless")
-driver = webdriver.Chrome(options=options)
+load_dotenv()
+
+driver = webdriver.Chrome()
 task = token_extraction.ExtractionTask(driver)
-tokenData = task.run()
-print("Token extracted:")
-print(tokenData)
-
+tokenData = task.run(os.getenv('USER_CPF'), os.getenv('USER_PASSWORD'))
+token_cacher.write(tokenData, filepath=os.getenv('B3_TOKEN_CACHEFILE_PATH'))
